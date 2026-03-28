@@ -438,7 +438,7 @@
         <label>The bet</label>
         <input type="text" id="description" placeholder="e.g. Eagles win the flag 2026" autocomplete="off">
       </div>
-      <div class="form-row">
+      <div class="form-grid">
         <div><label>Beers 🍺</label><input type="number" id="amount" min="0.5" step="0.5" value="1" inputmode="decimal"></div>
         <div>
           <label>Category</label>
@@ -449,7 +449,6 @@
             <option value="misc">🤷 Misc</option>
           </select>
         </div>
-        <div><label>Due date</label><input type="date" id="dueDate"></div>
       </div>
       <button class="add-btn" data-action="addBet">🍺 Lock It In</button>
     </div>
@@ -594,21 +593,19 @@
     const description = (document.getElementById('description').value || '').trim();
     const amount = parseFloat(document.getElementById('amount').value) || 1;
     const category = document.getElementById('category').value;
-    const dueDate = document.getElementById('dueDate').value;
 
     if (!bettor) { showToast('Who is betting?', true); return; }
     if (!opponent) { showToast('Who are they betting against?', true); return; }
     if (!description) { showToast('What is the bet?', true); return; }
 
     push(ref(db, 'bets'), {
-      type: 'bet', bettor, opponent, description, amount, category, dueDate,
+      type: 'bet', bettor, opponent, description, amount, category,
       status: 'open', createdAt: new Date().toISOString()
     });
 
     showToast('🍺 Bet locked in!');
     document.getElementById('description').value = '';
     document.getElementById('amount').value = '1';
-    document.getElementById('dueDate').value = '';
   }
 
   // --- Add Punishment ---
@@ -646,8 +643,8 @@
     update(ref(db, 'bets/' + id), updates);
     const b = bets[id];
     if (b) {
-      if (status === 'won') showToast('🏆 ' + b.bettor + ' wins ' + b.amount + ' 🍺!');
-      else if (status === 'lost') showToast('😬 ' + b.bettor + ' owes ' + b.amount + ' 🍺');
+      if (status === 'won') showToast('🏆 ' + b.bettor + ' wins! ' + b.opponent + ' owes ' + b.amount + ' 🍺');
+      else if (status === 'lost') showToast('😬 ' + b.bettor + ' lost — owes ' + b.amount + ' 🍺');
       else showToast('Bet reopened');
     }
   }
@@ -660,11 +657,13 @@
     Object.values(bets).forEach(b => {
       ensure(b.bettor); ensure(b.opponent);
       if (b.status === 'won') {
-        players[b.bettor].beers += b.amount; players[b.bettor].wins++;
+        // bettor won — opponent loses beers, bettor gains nothing
         players[b.opponent].beers -= b.amount; players[b.opponent].losses++;
+        players[b.bettor].wins++;
       } else if (b.status === 'lost') {
+        // bettor lost — bettor loses beers, opponent gains nothing
         players[b.bettor].beers -= b.amount; players[b.bettor].losses++;
-        players[b.opponent].beers += b.amount; players[b.opponent].wins++;
+        players[b.opponent].wins++;
       } else {
         players[b.bettor].open++; players[b.opponent].open++;
       }
@@ -738,7 +737,6 @@
   }
 
   function renderBetCard(b) {
-    const date = b.dueDate ? 'Due: ' + b.dueDate : fmtDate(b.createdAt);
     const catEmoji = {footy:'🏉', general:'🎲', sport:'⚽', misc:'🤷'}[b.category] || '🎲';
     return '<div class="bet-card ' + b.status + '">' +
       '<div>' +
@@ -752,7 +750,7 @@
           '<span class="tag tag-' + b.status + '">' + b.status.toUpperCase() + '</span>' +
           '<span class="bet-amount">' + b.amount + ' 🍺</span>' +
           '<span class="bet-amount">' + catEmoji + ' ' + b.category + '</span>' +
-          '<span class="bet-date">' + date + '</span>' +
+          '<span class="bet-date">' + fmtDate(b.createdAt) + '</span>' +
         '</div>' +
       '</div>' +
       '<div class="bet-actions">' +
