@@ -14,9 +14,7 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body { background: var(--stout); color: var(--cream); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
-
   body::before {
     content: ''; position: fixed; inset: 0;
     background: radial-gradient(ellipse at 20% 50%, rgba(200,153,26,0.08) 0%, transparent 60%),
@@ -45,78 +43,62 @@
   .tab-label { flex: 1; }
   .tab-label strong { display: block; font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; color: var(--border); }
   .tab-label span { font-size: 0.78rem; color: rgba(196,169,106,0.6); margin-top: 4px; display: block; }
-  .tab-btns { display: flex; flex-direction: column; gap: 8px; }
-  .pub-night-btn {
-    background: var(--gold); color: var(--stout); border: none; border-radius: 8px;
-    font-family: 'Playfair Display', serif; font-size: 0.8rem; font-weight: 700;
-    padding: 9px 13px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; text-align: center; white-space: nowrap;
-  }
-  .pub-night-btn:active { background: var(--amber); }
-  .spin-btn {
-    background: var(--punish); color: #fff; border: none; border-radius: 8px;
-    font-family: 'Playfair Display', serif; font-size: 0.8rem; font-weight: 700;
-    padding: 9px 13px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; text-align: center; white-space: nowrap;
-  }
+  .spin-btn { background: var(--punish); color: #fff; border: none; border-radius: 8px; font-family: 'Playfair Display', serif; font-size: 0.8rem; font-weight: 700; padding: 9px 13px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; text-align: center; white-space: nowrap; }
   .spin-btn:active { background: var(--punish-light); color: var(--stout); }
+
+  /* SESSION BANNER */
+  .session-banner {
+    background: rgba(92,184,92,0.12); border: 2px solid var(--green);
+    border-radius: 12px; padding: 14px 18px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .session-banner-text { flex: 1; font-size: 0.82rem; color: var(--green); }
+  .session-banner-text strong { display: block; font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 2px; }
+  .close-session-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; font-family: 'Playfair Display', serif; font-size: 0.82rem; font-weight: 700; padding: 10px 14px; cursor: pointer; touch-action: manipulation; white-space: nowrap; }
+  .close-session-btn:active { opacity: 0.8; }
 
   /* NAV */
   .nav-tabs { display: flex; border-bottom: 2px solid rgba(200,153,26,0.2); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab {
-    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 10px 12px; border: none; background: transparent; color: var(--border); cursor: pointer;
-    border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap;
-    touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color 0.2s;
-  }
+  .nav-tab { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 10px 12px; border: none; background: transparent; color: var(--border); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .nav-tab.active { color: var(--amber); border-bottom-color: var(--gold); font-weight: 700; }
   .nav-tab.t-punish.active { color: var(--punish-light); border-bottom-color: var(--punish-light); }
+  .nav-tab.t-pub.active { color: var(--green); border-bottom-color: var(--green); }
   .nav-tab.t-stats.active { color: var(--pink); border-bottom-color: var(--pink); }
-  .nav-tab.t-log.active { color: var(--green); border-bottom-color: var(--green); }
+  .nav-tab.t-log.active { color: var(--amber); border-bottom-color: var(--amber); }
 
   .nav-panel { display: none; }
   .nav-panel.active { display: block; }
+  .panel-wrap { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.3); border-top: none; border-radius: 0 0 12px 12px; padding: 20px; margin-bottom: 24px; }
 
-  .panel-wrap {
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.3);
-    border-top: none; border-radius: 0 0 12px 12px; padding: 20px; margin-bottom: 24px;
-  }
-
-  /* SECTION BOX */
+  /* SECTION */
   .section-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
   .section-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--amber); margin-bottom: 16px; letter-spacing: 1px; }
 
-  /* LEADERBOARD */
+  /* LEDGER */
   .player-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(200,153,26,0.12); margin-bottom: 8px; }
   .player-rank { font-size: 1.1rem; width: 28px; text-align: center; }
   .player-name { flex: 1; font-size: 0.88rem; color: var(--cream); font-weight: 500; }
-  .player-record { font-size: 0.67rem; color: var(--border); text-align: right; line-height: 1.7; }
+  .player-record { font-size: 0.67rem; color: var(--border); text-align: right; line-height: 1.8; }
   .player-balance { font-weight: 700; font-size: 0.95rem; min-width: 68px; text-align: right; }
   .pos { color: var(--green); } .neg { color: var(--red); } .zero { color: var(--border); }
 
   /* FORMS */
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .form-full { margin-bottom: 12px; }
   label { display: block; font-size: 0.66rem; color: var(--border); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
-  input, select {
-    width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(200,153,26,0.35);
-    border-radius: 7px; color: var(--cream); font-family: 'DM Mono', monospace;
-    font-size: 16px; padding: 10px 12px; outline: none; transition: border-color 0.2s;
-    -webkit-appearance: none; appearance: none;
-  }
+  input, select { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(200,153,26,0.35); border-radius: 7px; color: var(--cream); font-family: 'DM Mono', monospace; font-size: 16px; padding: 10px 12px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; appearance: none; }
   input:focus, select:focus { border-color: var(--gold); }
   select option { background: #2a1a08; }
-
-  .add-btn {
-    width: 100%; border: none; border-radius: 8px; font-family: 'Playfair Display', serif;
-    font-size: 1.05rem; font-weight: 700; padding: 14px; cursor: pointer; letter-spacing: 1px;
-    touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 50px;
-  }
+  .add-btn { width: 100%; border: none; border-radius: 8px; font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; padding: 14px; cursor: pointer; letter-spacing: 1px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 50px; }
   .btn-gold { background: var(--gold); color: var(--stout); }
   .btn-gold:active { background: var(--amber); }
   .btn-purple { background: var(--punish); color: #fff; }
-  .btn-purple:active { background: var(--punish-light); color: var(--stout); }
-
+  .btn-purple:active { background: var(--punish-light); }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:active { opacity: 0.85; }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:active { opacity: 0.85; }
   .custom-row { display: none; margin-bottom: 12px; }
   .custom-row.visible { display: block; }
 
@@ -127,12 +109,7 @@
 
   /* FILTERS */
   .bets-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-  .filter-btn {
-    background: transparent; border: 1px solid rgba(200,153,26,0.3); color: var(--border);
-    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 6px 12px; border-radius: 20px; cursor: pointer;
-    touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: all 0.2s;
-  }
+  .filter-btn { background: transparent; border: 1px solid rgba(200,153,26,0.3); color: var(--border); font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 12px; border-radius: 20px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .filter-btn.active { background: var(--gold); color: var(--stout); border-color: var(--gold); font-weight: 700; }
 
   /* BET CARDS */
@@ -158,30 +135,17 @@
   .bet-amount { font-size: 0.78rem; color: var(--border); }
   .bet-witnesses { font-size: 0.68rem; color: rgba(196,169,106,0.5); }
   .bet-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-
-  .action-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 1px;
-    padding: 7px 11px; border-radius: 5px; border: 1px solid; cursor: pointer;
-    text-transform: uppercase; white-space: nowrap; background: transparent;
-    touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 32px;
-  }
+  .action-btn { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 1px; padding: 7px 11px; border-radius: 5px; border: 1px solid; cursor: pointer; text-transform: uppercase; white-space: nowrap; background: transparent; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 32px; }
   .btn-won { border-color: var(--green); color: var(--green); }
   .btn-won:active { background: rgba(92,184,92,0.2); }
   .btn-lost { border-color: var(--red); color: var(--red); }
   .btn-lost:active { background: rgba(224,82,82,0.2); }
   .btn-accept { border-color: var(--green); color: var(--green); }
-  .btn-accept:active { background: rgba(92,184,92,0.2); }
   .btn-decline { border-color: var(--border); color: var(--border); }
   .btn-reopen { border-color: var(--gold); color: var(--gold); }
   .btn-reopen:active { background: rgba(200,153,26,0.2); }
   .btn-delete { border-color: rgba(196,169,106,0.25); color: rgba(196,169,106,0.4); }
   .btn-delete:active { border-color: var(--red); color: var(--red); }
-  .btn-drink { border-color: var(--green); color: var(--green); }
-  .btn-drink:active { background: rgba(92,184,92,0.2); }
-  .btn-partial { border-color: var(--amber); color: var(--amber); }
-  .btn-partial:active { background: rgba(232,184,75,0.15); }
-  .btn-settle { border-color: #60a5fa; color: #60a5fa; }
-  .btn-settle:active { background: rgba(96,165,250,0.15); }
 
   /* PUNISH CARD */
   .punish-card { border: 1px solid rgba(124,58,237,0.25); border-left: 3px solid var(--punish-light); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; background: rgba(124,58,237,0.05); }
@@ -189,8 +153,27 @@
   .punish-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--punish-light); font-weight: 700; }
   .punish-desc { font-size: 0.86rem; color: var(--cream); line-height: 1.4; margin-bottom: 8px; }
 
-  /* STATS PANEL */
-  .hof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; }
+  /* PUB SESSION */
+  .buoy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .buoy-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.2); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 8px; }
+  .buoy-name { flex: 1; font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--cream); font-weight: 700; }
+  .buoy-owed { font-size: 0.65rem; color: var(--red); display: block; font-family: 'DM Mono', monospace; }
+  .buoy-count { font-size: 1.2rem; font-weight: 700; min-width: 26px; text-align: center; color: var(--amber); font-family: 'Playfair Display', serif; }
+  .buoy-stepper { display: flex; flex-direction: column; gap: 3px; }
+  .step-btn { background: rgba(200,153,26,0.15); border: 1px solid rgba(200,153,26,0.3); color: var(--amber); border-radius: 5px; width: 28px; height: 24px; font-size: 1rem; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; font-weight: 700; line-height: 1; }
+  .step-btn:active { background: rgba(200,153,26,0.35); }
+
+  /* BALANCE ROWS */
+  .balance-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; border: 1px solid; margin-bottom: 8px; }
+  .balance-row.credit { background: rgba(92,184,92,0.07); border-color: rgba(92,184,92,0.2); border-left: 3px solid var(--green); }
+  .balance-row.debit { background: rgba(224,82,82,0.07); border-color: rgba(224,82,82,0.2); border-left: 3px solid var(--red); }
+  .balance-row.square { background: rgba(255,255,255,0.03); border-color: rgba(200,153,26,0.12); border-left: 3px solid var(--border); }
+  .balance-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; flex: 1; }
+  .balance-detail { font-size: 0.68rem; color: var(--border); }
+  .balance-net { font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
+
+  /* STATS / HOF */
+  .hof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .hof-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.2); border-radius: 10px; padding: 14px 12px; text-align: center; }
   .hof-emoji { font-size: 1.8rem; display: block; margin-bottom: 6px; }
   .hof-title { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--border); margin-bottom: 4px; }
@@ -202,58 +185,25 @@
   .beer-log-text { flex: 1; font-size: 0.8rem; color: var(--cream); }
   .beer-log-date { font-size: 0.63rem; color: rgba(196,169,106,0.5); white-space: nowrap; }
 
-  /* MODALS */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 200; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: #2a1a08; border: 2px solid var(--gold); border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; margin: auto; }
-  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--amber); margin-bottom: 6px; }
-  .modal-sub { font-size: 0.75rem; color: var(--border); margin-bottom: 20px; }
-  .modal-close { width: 100%; margin-top: 16px; background: transparent; border: 1px solid rgba(200,153,26,0.3); color: var(--border); border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 12px; cursor: pointer; touch-action: manipulation; }
-
-  /* PUB NIGHT */
-  .settle-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(200,153,26,0.15); margin-bottom: 8px; flex-wrap: wrap; }
-  .settle-names { font-size: 0.82rem; flex: 1; }
-  .settle-amount { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--red); font-weight: 700; min-width: 60px; text-align: right; }
-  .settle-actions { display: flex; gap: 6px; }
-  .settle-btn { border: none; border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 0.65rem; padding: 7px 12px; cursor: pointer; touch-action: manipulation; letter-spacing: 1px; text-transform: uppercase; min-height: 32px; }
-  .settle-btn-full { background: var(--green); color: #fff; }
-  .settle-btn-partial { background: var(--amber); color: var(--stout); }
-  .settle-input { width: 70px; background: rgba(0,0,0,0.4); border: 1px solid rgba(200,153,26,0.35); border-radius: 6px; color: var(--cream); font-family: 'DM Mono', monospace; font-size: 14px; padding: 6px 8px; outline: none; text-align: center; }
-
-  /* SPIN WHEEL MODAL */
+  /* SPIN WHEEL */
   .spin-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 300; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; overflow-y: auto; }
   .spin-modal.open { display: flex; }
   .spin-inner { width: 100%; max-width: 420px; margin: auto; text-align: center; }
   .spin-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--amber); margin-bottom: 6px; }
   .spin-sub { font-size: 0.75rem; color: var(--border); margin-bottom: 20px; }
-
   .players-input { display: flex; gap: 8px; margin-bottom: 12px; }
   .players-input input { flex: 1; }
   .add-player-btn { background: var(--gold); color: var(--stout); border: none; border-radius: 7px; font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 700; padding: 0 16px; cursor: pointer; touch-action: manipulation; white-space: nowrap; }
-
   .player-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; min-height: 36px; }
   .player-chip { background: rgba(200,153,26,0.2); border: 1px solid rgba(200,153,26,0.4); border-radius: 20px; padding: 6px 12px; font-size: 0.78rem; color: var(--amber); display: flex; align-items: center; gap: 6px; }
   .chip-remove { cursor: pointer; color: var(--border); font-size: 0.9rem; line-height: 1; }
-
   .wheel-wrap { position: relative; width: 280px; height: 280px; margin: 0 auto 20px; }
   canvas#wheelCanvas { border-radius: 50%; display: block; }
-  .wheel-pointer {
-    position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
-    font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); z-index: 10;
-  }
-
-  .spin-go-btn {
-    background: var(--punish); color: #fff; border: none; border-radius: 10px;
-    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900;
-    padding: 16px 40px; cursor: pointer; letter-spacing: 1px; margin-bottom: 16px;
-    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-  }
-  .spin-go-btn:active { background: var(--punish-light); color: var(--stout); }
+  .wheel-pointer { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); z-index: 10; }
+  .spin-go-btn { background: var(--punish); color: #fff; border: none; border-radius: 10px; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900; padding: 16px 40px; cursor: pointer; letter-spacing: 1px; margin-bottom: 16px; touch-action: manipulation; }
   .spin-go-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
   .spin-result { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--amber); min-height: 40px; margin-bottom: 16px; font-weight: 700; }
-
-  .spin-close { background: transparent; border: 1px solid rgba(200,153,26,0.3); color: var(--border); border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 12px 24px; cursor: pointer; touch-action: manipulation; }
+  .spin-close { background: transparent; border: 1px solid rgba(200,153,26,0.3); color: var(--border); border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 12px 24px; cursor: pointer; }
 
   /* PARTIAL MODAL */
   .partial-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
@@ -261,17 +211,27 @@
   .partial-inner { background: #2a1a08; border: 2px solid var(--amber); border-radius: 16px; padding: 24px; width: 100%; max-width: 360px; }
   .partial-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--amber); margin-bottom: 16px; }
 
-  .empty-state { text-align: center; color: var(--border); font-size: 0.8rem; padding: 28px 16px; opacity: 0.6; }
+  /* CLOSE SESSION MODAL */
+  .session-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
+  .session-modal.open { display: flex; }
+  .session-inner { background: #2a1a08; border: 2px solid var(--green); border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; margin: auto; }
+  .session-inner-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green); margin-bottom: 6px; }
+  .session-inner-sub { font-size: 0.75rem; color: var(--border); margin-bottom: 20px; }
+  .summary-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(200,153,26,0.15); margin-bottom: 8px; gap: 10px; }
+  .summary-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--cream); }
+  .summary-detail { font-size: 0.72rem; color: var(--border); flex: 1; padding-left: 8px; }
+  .summary-result { font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
 
+  .empty-state { text-align: center; color: var(--border); font-size: 0.8rem; padding: 28px 16px; opacity: 0.6; }
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--gold); color: var(--stout); font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 700; padding: 12px 24px; border-radius: 8px; transition: transform 0.3s ease; z-index: 400; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
   .toast.error { background: var(--red); color: #fff; }
 
   @media (max-width: 480px) {
-    .form-grid, .form-row-2 { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
     .hof-grid { grid-template-columns: 1fr 1fr; }
+    .buoy-grid { grid-template-columns: 1fr 1fr; }
     .the-tab { flex-wrap: wrap; }
-    .tab-btns { flex-direction: row; }
   }
 </style>
 </head>
@@ -290,11 +250,19 @@
     <div class="tab-number" id="tabNumber">0</div>
     <div class="tab-label">
       <strong>🍺 The Tab</strong>
-      <span id="tabBreakdown">Total beers currently owed</span>
+      <span id="tabBreakdown">Total beers outstanding</span>
     </div>
-    <div class="tab-btns">
-      <button class="spin-btn" data-action="openSpin">🎰 Who's Round?</button>
+    <button class="spin-btn" data-action="openSpin">🎰 Who's Round?</button>
+  </div>
+
+  <!-- SESSION BANNER (shown when session is active) -->
+  <div class="session-banner" id="sessionBanner" style="display:none">
+    <div style="font-size:1.4rem">🍻</div>
+    <div class="session-banner-text">
+      <strong>Pub Session Active</strong>
+      <span id="sessionBannerDetail">Log beers as they're consumed</span>
     </div>
+    <button class="close-session-btn" data-action="openCloseSession">Close Session</button>
   </div>
 
   <!-- LEADERBOARD -->
@@ -303,17 +271,18 @@
     <div id="leaderboard"><div class="empty-state">No players yet</div></div>
   </div>
 
-  <!-- MAIN NAV -->
+  <!-- NAV -->
   <div class="nav-tabs">
     <button class="nav-tab t-punish active" data-action="nav" data-nav="punishments">⚡ Punishments</button>
     <button class="nav-tab" data-action="nav" data-nav="bets">🍺 Bets</button>
+    <button class="nav-tab t-pub" data-action="nav" data-nav="pub">🍻 Pub Session</button>
     <button class="nav-tab t-stats" data-action="nav" data-nav="stats">📊 Stats</button>
     <button class="nav-tab t-log" data-action="nav" data-nav="log">📖 Beer Log</button>
   </div>
 
   <div class="panel-wrap">
 
-    <!-- PUNISHMENTS PANEL -->
+    <!-- PUNISHMENTS -->
     <div class="nav-panel active" id="nav-punishments">
       <div class="section-title" style="margin-bottom:14px">⚡ Issue a Punishment</div>
       <div class="form-grid">
@@ -343,7 +312,7 @@
       </div>
     </div>
 
-    <!-- BETS PANEL -->
+    <!-- BETS -->
     <div class="nav-panel" id="nav-bets">
       <div class="section-title" style="margin-bottom:14px">➕ Propose a Bet</div>
       <div class="form-grid">
@@ -383,47 +352,42 @@
       </div>
     </div>
 
-    <!-- STATS PANEL -->
+    <!-- PUB SESSION -->
+    <div class="nav-panel" id="nav-pub">
+      <div id="pubSessionContent">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- STATS -->
     <div class="nav-panel" id="nav-stats">
       <div class="section-title" style="margin-bottom:14px">📊 Stats</div>
       <div class="hof-grid" id="hofGrid"><div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div></div>
     </div>
 
-    <!-- BEER LOG PANEL -->
+    <!-- BEER LOG -->
     <div class="nav-panel" id="nav-log">
       <div class="section-title" style="margin-bottom:14px">📖 Beer Log</div>
-      <div id="beerLog"><div class="empty-state">No beers logged yet. Get drinking.</div></div>
+      <div id="beerLog"><div class="empty-state">No beers logged yet.</div></div>
     </div>
 
   </div>
 </div>
 
-<!-- PUB NIGHT MODAL -->
-<div class="modal-overlay" id="pubNightModal">
-  <div class="modal">
-    <div class="modal-title">🍻 Settle Up</div>
-    <div class="modal-sub">Log beers consumed tonight</div>
-    <div id="pubNightList"></div>
-    <button class="modal-close" data-action="closePubNight">Close</button>
-  </div>
-</div>
-
-<!-- PARTIAL MODAL -->
-<div class="partial-modal" id="partialModal">
-  <div class="partial-inner">
-    <div class="partial-title">🍺 Partial Payment</div>
-    <div class="form-full" style="margin-bottom:16px">
-      <label>Beers being paid now</label>
-      <input type="number" id="partialAmount" min="1" step="1" value="1" inputmode="numeric">
-    </div>
-    <div style="display:flex;gap:10px">
-      <button class="add-btn btn-gold" style="flex:1" data-action="confirmPartial">✓ Confirm</button>
-      <button class="add-btn" style="flex:1;background:transparent;border:1px solid rgba(200,153,26,0.3);color:var(--border)" data-action="closePartial">Cancel</button>
+<!-- CLOSE SESSION MODAL -->
+<div class="session-modal" id="closeSessionModal">
+  <div class="session-inner">
+    <div class="session-inner-title">🍻 Close Session</div>
+    <div class="session-inner-sub">Here's what happened tonight. Beers drunk auto-pay off oldest debts first — surplus goes to credit.</div>
+    <div id="sessionSummary"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="add-btn btn-green" style="flex:1" data-action="confirmCloseSession">✓ Confirm & Close</button>
+      <button class="add-btn" style="flex:1;background:transparent;border:1px solid rgba(200,153,26,0.3);color:var(--border)" data-action="cancelCloseSession">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- SPIN WHEEL MODAL -->
+<!-- SPIN WHEEL -->
 <div class="spin-modal" id="spinModal">
   <div class="spin-inner">
     <div class="spin-title">🎰 Who's Round?</div>
@@ -438,8 +402,7 @@
       <canvas id="wheelCanvas" width="280" height="280"></canvas>
     </div>
     <div class="spin-result" id="spinResult"></div>
-    <button class="spin-go-btn" id="spinGoBtn" data-action="spinWheel">🍺 SPIN</button>
-    <br>
+    <button class="spin-go-btn" id="spinGoBtn" data-action="spinWheel">🍺 SPIN</button><br>
     <button class="spin-close" data-action="closeSpin">Close</button>
   </div>
 </div>
@@ -460,20 +423,32 @@
     appId: "1:608475080713:web:46d638fd63134b2c25b0d8"
   };
 
+  const BUOYS = ['Callum','Jacko','Tyler','Liam','Kaden','Ben','Mason','Owain'];
+  const WHEEL_COLORS = ['#c8991a','#7c3aed','#e05252','#5cb85c','#60a5fa','#f472b6','#e8b84b','#a78bfa'];
+
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  let bets = {}, punishments = {}, beerLog = {};
+  let bets = {}, punishments = {}, beerLog = {}, activeSession = null, credits = {};
   let currentFilter = 'all';
-  let partialTargetId = null, partialTargetType = null;
-  let spinPlayers = [];
-  let isSpinning = false;
+  let spinPlayers = [], isSpinning = false;
+  // Local session drink counts (not saved until session closes)
+  const sessionCounts = {};
+  BUOYS.forEach(n => sessionCounts[n] = 0);
 
-  // --- Firebase ---
+  // --- Firebase listeners ---
   const syncEl = document.getElementById('syncStatus');
   onValue(ref(db, 'bets'), snap => { bets = snap.val() || {}; render(); syncEl.textContent = '🟢 live sync active'; syncEl.className = 'sync-status connected'; }, () => { syncEl.textContent = '🔴 connection error'; syncEl.className = 'sync-status error'; });
   onValue(ref(db, 'punishments'), snap => { punishments = snap.val() || {}; render(); });
   onValue(ref(db, 'beerLog'), snap => { beerLog = snap.val() || {}; renderBeerLog(); });
+  onValue(ref(db, 'credits'), snap => { credits = snap.val() || {}; render(); });
+  onValue(ref(db, 'activeSession'), snap => { activeSession = snap.val(); renderPubSession(); renderSessionBanner(); });
+  onValue(ref(db, 'sessionCounts'), snap => {
+    const saved = snap.val() || {};
+    BUOYS.forEach(n => sessionCounts[n] = saved[n] || 0);
+    renderSessionBanner();
+    renderBuoyGrid();
+  });
 
   // --- Event delegation ---
   document.addEventListener('click', e => {
@@ -489,30 +464,33 @@
       document.getElementById('nav-' + el.dataset.nav).classList.add('active');
     }
     else if (a === 'filter') { currentFilter = el.dataset.filter; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); renderBets(); }
-    else if (a === 'addBet') addBet();
     else if (a === 'addPunishment') addPunishment();
+    else if (a === 'addBet') addBet();
     else if (a === 'acceptBet') acceptBet(id);
     else if (a === 'declineBet') declineBet(id);
     else if (a === 'won') markBet(id, 'won');
     else if (a === 'lost') markBet(id, 'lost');
     else if (a === 'reopen') markBet(id, 'open');
-    else if (a === 'drinkBet') drinkFull(id, 'bet');
-    else if (a === 'drinkPunish') drinkFull(id, 'punish');
-    else if (a === 'partialBet') openPartial(id, 'bet');
-    else if (a === 'partialPunish') openPartial(id, 'punish');
-    else if (a === 'confirmPartial') confirmPartial();
-    else if (a === 'closePartial') closePartial();
-    else if (a === 'settlePairFull') settlePair(el.dataset.debtor, el.dataset.creditor, parseFloat(el.dataset.amount), false);
-    else if (a === 'openPubNight') openPubNight();
-    else if (a === 'closePubNight') document.getElementById('pubNightModal').classList.remove('open');
+    else if (a === 'deleteBet') { if (confirm('Delete this bet?')) { remove(ref(db, 'bets/' + id)); showToast('Deleted'); } }
+    else if (a === 'deletePunish') { if (confirm('Delete this punishment?')) { remove(ref(db, 'punishments/' + id)); showToast('Deleted'); } }
+    else if (a === 'startSession') startSession();
+    else if (a === 'stepDrink') {
+      const name = el.dataset.name, dir = parseInt(el.dataset.dir);
+      sessionCounts[name] = Math.max(0, sessionCounts[name] + dir);
+      update(ref(db, 'sessionCounts'), { [name]: sessionCounts[name] });
+      const dc = document.getElementById('dc-' + name);
+      if (dc) dc.textContent = sessionCounts[name];
+      renderSessionBanner();
+    }
+    else if (a === 'openCloseSession') openCloseSession();
+    else if (a === 'confirmCloseSession') confirmCloseSession();
+    else if (a === 'cancelCloseSession') document.getElementById('closeSessionModal').classList.remove('open');
     else if (a === 'undoLog') undoLog(id);
     else if (a === 'openSpin') openSpin();
     else if (a === 'closeSpin') document.getElementById('spinModal').classList.remove('open');
     else if (a === 'addSpinPlayer') addSpinPlayer();
     else if (a === 'removeSpinPlayer') { spinPlayers = spinPlayers.filter((_, i) => i !== parseInt(el.dataset.idx)); renderChips(); drawWheel(); }
     else if (a === 'spinWheel') doSpin();
-    else if (a === 'deleteBet') { if (confirm('Delete this bet?')) { remove(ref(db, 'bets/' + id)); showToast('Deleted'); } }
-    else if (a === 'deletePunish') { if (confirm('Delete this punishment?')) { remove(ref(db, 'punishments/' + id)); showToast('Deleted'); } }
   });
 
   document.addEventListener('change', e => {
@@ -521,69 +499,206 @@
 
   document.getElementById('spinPlayerInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addSpinPlayer(); } });
 
-  // --- Add Bet ---
-  function addBet() {
-    const bettor = v('bettor'), opponent = v('opponent'), description = v('description');
-    const amount = Math.round(parseFloat(document.getElementById('amount').value) || 1);
-    const category = document.getElementById('category').value;
-    const witness1 = v('witness1'), witness2 = v('witness2');
-    if (!bettor) { showToast('Who is proposing?', true); return; }
-    if (!opponent) { showToast('Who is the bet against?', true); return; }
-    if (!description) { showToast('What is the bet?', true); return; }
-    push(ref(db, 'bets'), { type: 'bet', bettor, opponent, description, amount, category, witness1: witness1 || null, witness2: witness2 || null, status: 'pending', createdAt: new Date().toISOString() });
-    showToast('📨 Bet proposed — waiting for ' + opponent + ' to accept');
-    ['description','witness1','witness2'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('amount').value = '1';
+  // --- Pub Session ---
+  function startSession() {
+    BUOYS.forEach(n => sessionCounts[n] = 0);
+    const clearCounts = {};
+    BUOYS.forEach(n => clearCounts[n] = 0);
+    update(ref(db, 'sessionCounts'), clearCounts);
+    update(ref(db, 'activeSession'), { startedAt: new Date().toISOString(), active: true });
+    showToast('🍻 Pub session started!');
   }
 
-  function acceptBet(id) { update(ref(db, 'bets/' + id), { status: 'open', acceptedAt: new Date().toISOString() }); showToast('✅ Bet accepted — game on!'); }
-  function declineBet(id) { update(ref(db, 'bets/' + id), { status: 'declined', declinedAt: new Date().toISOString() }); showToast('❌ Bet declined'); }
-
-  function markBet(id, status) {
-    const b = bets[id]; if (!b) return;
-    update(ref(db, 'bets/' + id), { status, resolvedAt: status !== 'open' ? new Date().toISOString() : null });
-    if (status === 'won') showToast('🏆 ' + b.bettor + ' wins! ' + b.opponent + ' owes ' + b.amount + ' 🍺');
-    else if (status === 'lost') showToast('😬 ' + b.bettor + ' lost — owes ' + b.amount + ' 🍺');
-    else showToast('↩ Bet reopened');
-  }
-
-  // --- Drink / Pay ---
-  function drinkFull(id, type) {
-    if (type === 'bet') {
-      const b = bets[id]; if (!b) return;
-      const debtor = b.status === 'lost' ? b.bettor : b.opponent;
-      const newRef = push(ref(db, 'beerLog'), { text: debtor + ' drank ' + b.amount + ' 🍺 (bet: ' + b.description + ')', amount: b.amount, createdAt: new Date().toISOString(), undoType: 'bet', undoBetId: id });
-      update(ref(db, 'bets/' + id), { paid: true, paidAt: new Date().toISOString(), logKey: newRef.key });
+  function renderSessionBanner() {
+    const banner = document.getElementById('sessionBanner');
+    if (activeSession && activeSession.active) {
+      banner.style.display = 'flex';
+      const total = BUOYS.reduce((s, n) => s + (sessionCounts[n] || 0), 0);
+      const perPerson = BUOYS.filter(n => sessionCounts[n] > 0).map(n => n + ' ' + sessionCounts[n] + '🍺').join(' · ');
+      document.getElementById('sessionBannerDetail').innerHTML =
+        '<strong style="color:var(--amber)">' + total + ' beers</strong> logged tonight' +
+        (perPerson ? '<br><span style="font-size:0.7rem;opacity:0.8">' + perPerson + '</span>' : '');
     } else {
-      const p = punishments[id]; if (!p) return;
-      const newRef = push(ref(db, 'beerLog'), { text: p.name + ' drank ' + p.amount + ' 🍺 punishment (reason: ' + p.reason + ')', amount: p.amount, createdAt: new Date().toISOString(), undoType: 'punish', undoPunishId: id });
-      update(ref(db, 'punishments/' + id), { paid: true, paidAt: new Date().toISOString(), logKey: newRef.key });
+      banner.style.display = 'none';
     }
-    showToast('🍺 Cheers! Logged');
   }
 
-  function openPartial(id, type) { partialTargetId = id; partialTargetType = type; document.getElementById('partialAmount').value = '1'; document.getElementById('partialModal').classList.add('open'); }
-  function closePartial() { partialTargetId = null; partialTargetType = null; document.getElementById('partialModal').classList.remove('open'); }
-
-  function confirmPartial() {
-    if (!partialTargetId) return;
-    const partial = Math.round(parseFloat(document.getElementById('partialAmount').value) || 1);
-    if (partialTargetType === 'bet') {
-      const b = bets[partialTargetId]; if (!b) return;
-      const debtor = b.status === 'lost' ? b.bettor : b.opponent;
-      const newPaid = Math.min((b.paidPartial || 0) + partial, b.amount);
-      push(ref(db, 'beerLog'), { text: debtor + ' drank ' + partial + ' of ' + b.amount + ' 🍺 (bet: ' + b.description + ')', amount: partial, createdAt: new Date().toISOString(), undoType: 'betPartial', undoBetId: partialTargetId, partialAmount: partial });
-      const upd = { paidPartial: newPaid }; if (newPaid >= b.amount) upd.paid = true;
-      update(ref(db, 'bets/' + partialTargetId), upd);
+  function renderPubSession() {
+    const el = document.getElementById('pubSessionContent');
+    if (!activeSession || !activeSession.active) {
+      // No active session
+      el.innerHTML =
+        '<div class="section-title" style="margin-bottom:8px">🍻 Pub Session</div>' +
+        '<p style="font-size:0.78rem;color:var(--border);margin-bottom:20px">Start a session to track beers consumed tonight. Beers drunk auto-pay off debts oldest first — surplus goes to credit.</p>' +
+        '<div style="margin-bottom:24px" id="balanceSection"></div>' +
+        '<button class="add-btn btn-green" data-action="startSession">🍻 Start Pub Session</button>';
+      renderBalances();
     } else {
-      const p = punishments[partialTargetId]; if (!p) return;
-      const newPaid = Math.min((p.paidPartial || 0) + partial, p.amount);
-      push(ref(db, 'beerLog'), { text: p.name + ' drank ' + partial + ' of ' + p.amount + ' 🍺 punishment (reason: ' + p.reason + ')', amount: partial, createdAt: new Date().toISOString(), undoType: 'punishPartial', undoPunishId: partialTargetId, partialAmount: partial });
-      const upd = { paidPartial: newPaid }; if (newPaid >= p.amount) upd.paid = true;
-      update(ref(db, 'punishments/' + partialTargetId), upd);
+      // Active session — show drink logger
+      el.innerHTML =
+        '<div class="section-title" style="margin-bottom:8px">🍻 Session in Progress</div>' +
+        '<p style="font-size:0.78rem;color:var(--border);margin-bottom:16px">Tap + each time someone drinks. Hit Close Session when done.</p>' +
+        '<div class="buoy-grid" id="buoyGrid"></div>' +
+        '<div style="margin-top:8px" id="balanceSection"></div>';
+      renderBuoyGrid();
+      renderBalances();
     }
-    showToast('🍺 ' + partial + ' beer' + (partial > 1 ? 's' : '') + ' logged');
-    closePartial();
+  }
+
+  function renderBuoyGrid() {
+    const grid = document.getElementById('buoyGrid');
+    if (!grid) return;
+    grid.innerHTML = BUOYS.map(name => {
+      const owed = calcOwedByPerson(name);
+      return '<div class="buoy-card">' +
+        '<div>' +
+          '<div class="buoy-name">' + name + '</div>' +
+          (owed > 0 ? '<span class="buoy-owed">owes ' + owed + ' 🍺</span>' : '<span class="buoy-owed" style="color:var(--green)">square ✓</span>') +
+        '</div>' +
+        '<div class="buoy-count" id="dc-' + name + '">' + sessionCounts[name] + '</div>' +
+        '<div class="buoy-stepper">' +
+          '<button class="step-btn" data-action="stepDrink" data-name="' + name + '" data-dir="1">+</button>' +
+          '<button class="step-btn" data-action="stepDrink" data-name="' + name + '" data-dir="-1">−</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderBalances() {
+    const el = document.getElementById('balanceSection');
+    if (!el) return;
+    const rows = BUOYS.map(name => {
+      const owed = calcOwedByPerson(name);
+      const credit = (credits[name] && credits[name].amount) || 0;
+      const net = credit - owed; // positive = in credit, negative = still owes
+      return { name, owed, credit, net };
+    }).sort((a, b) => b.net - a.net);
+
+    const hasData = rows.some(r => r.owed > 0 || r.credit > 0);
+    if (!hasData) return;
+
+    el.innerHTML = '<div class="section-title" style="margin-bottom:12px;margin-top:20px">💳 Running Balance</div>' +
+      rows.map(r => {
+        const cls = r.net > 0 ? 'credit' : r.net < 0 ? 'debit' : 'square';
+        const color = r.net > 0 ? 'var(--green)' : r.net < 0 ? 'var(--red)' : 'var(--border)';
+        return '<div class="balance-row ' + cls + '">' +
+          '<span class="balance-name" style="color:' + color + '">' + esc(r.name) + '</span>' +
+          '<span class="balance-detail">' + r.credit + ' drunk · ' + r.owed + ' owed</span>' +
+          '<span class="balance-net" style="color:' + color + '">' + (r.net > 0 ? '+' : '') + r.net + ' 🍺</span>' +
+        '</div>';
+      }).join('');
+  }
+
+  function calcOwedByPerson(name) {
+    let owed = 0;
+    Object.values(bets).forEach(b => {
+      if (b.paid === true) return;
+      const rem = b.amount - (b.paidPartial || 0);
+      if (rem <= 0) return;
+      if ((b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name)) owed += rem;
+    });
+    Object.values(punishments).forEach(p => {
+      if (p.paid === true) return;
+      if (p.name === name) owed += (p.amount - (p.paidPartial || 0));
+    });
+    return Math.round(owed);
+  }
+
+  function openCloseSession() {
+    const summary = document.getElementById('sessionSummary');
+    const rows = BUOYS.map(name => {
+      const drunk = sessionCounts[name];
+      const owed = calcOwedByPerson(name);
+      const credit = (credits[name] && credits[name].amount) || 0;
+      // Apply tonight's drinks against debt first, then credit
+      const debtPaid = Math.min(drunk, owed);
+      const newCredit = credit + Math.max(0, drunk - owed);
+      const remainingDebt = owed - debtPaid;
+      return { name, drunk, owed, debtPaid, newCredit, remainingDebt };
+    }).filter(r => r.drunk > 0 || r.owed > 0 || r.newCredit !== ((credits[r.name] && credits[r.name].amount) || 0));
+
+    if (!rows.length) {
+      summary.innerHTML = '<div class="empty-state">No beers logged this session.</div>';
+    } else {
+      summary.innerHTML = rows.map(r => {
+        let detail = '';
+        if (r.drunk > 0 && r.debtPaid > 0) detail += r.debtPaid + ' 🍺 debt paid';
+        if (r.newCredit > 0 && r.drunk > r.debtPaid) detail += (detail ? ' · ' : '') + r.newCredit + ' 🍺 credit';
+        if (r.remainingDebt > 0) detail += (detail ? ' · ' : '') + r.remainingDebt + ' 🍺 still owed';
+        if (r.drunk === 0) detail = 'no beers tonight — ' + r.owed + ' 🍺 still owed';
+        const color = r.remainingDebt === 0 && r.drunk > 0 ? 'var(--green)' : r.remainingDebt > 0 ? 'var(--red)' : 'var(--border)';
+        return '<div class="summary-row">' +
+          '<span class="summary-name">' + esc(r.name) + '</span>' +
+          '<span class="summary-detail">' + detail + '</span>' +
+          '<span class="summary-result" style="color:' + color + '">' + (r.drunk > 0 ? r.drunk + ' 🍺' : '—') + '</span>' +
+        '</div>';
+      }).join('');
+    }
+    document.getElementById('closeSessionModal').classList.add('open');
+  }
+
+  function confirmCloseSession() {
+    const now = new Date().toISOString();
+    BUOYS.forEach(name => {
+      const drunk = sessionCounts[name];
+      if (drunk === 0) return;
+      const owed = calcOwedByPerson(name);
+      let remaining = drunk;
+
+      // Pay off bets oldest first
+      const unpaidBets = Object.entries(bets)
+        .filter(([, b]) => b.paid !== true && ((b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name)))
+        .sort((a, b) => (a[1].createdAt || '').localeCompare(b[1].createdAt || ''));
+
+      unpaidBets.forEach(([id, b]) => {
+        if (remaining <= 0) return;
+        const betOwed = b.amount - (b.paidPartial || 0);
+        if (remaining >= betOwed) {
+          update(ref(db, 'bets/' + id), { paid: true, paidAt: now });
+          remaining -= betOwed;
+        } else {
+          update(ref(db, 'bets/' + id), { paidPartial: (b.paidPartial || 0) + remaining });
+          remaining = 0;
+        }
+      });
+
+      // Pay off punishments oldest first
+      const unpaidPunish = Object.entries(punishments)
+        .filter(([, p]) => p.paid !== true && p.name === name)
+        .sort((a, b) => (a[1].createdAt || '').localeCompare(b[1].createdAt || ''));
+
+      unpaidPunish.forEach(([id, p]) => {
+        if (remaining <= 0) return;
+        const pOwed = p.amount - (p.paidPartial || 0);
+        if (remaining >= pOwed) {
+          update(ref(db, 'punishments/' + id), { paid: true, paidAt: now });
+          remaining -= pOwed;
+        } else {
+          update(ref(db, 'punishments/' + id), { paidPartial: (p.paidPartial || 0) + remaining });
+          remaining = 0;
+        }
+      });
+
+      // Remaining goes to credit
+      const currentCredit = (credits[name] && credits[name].amount) || 0;
+      update(ref(db, 'credits/' + name), { amount: currentCredit + remaining, name });
+
+      // Log it
+      push(ref(db, 'beerLog'), {
+        text: name + ' drank ' + drunk + ' 🍺' + (Math.min(drunk, owed) > 0 ? ' — paid off ' + Math.min(drunk, owed) + ' owed' : '') + (remaining > 0 ? ' — ' + remaining + ' in credit' : ''),
+        amount: drunk, createdAt: now, undoType: 'session', sessionName: name, sessionDrunk: drunk
+      });
+
+      sessionCounts[name] = 0;
+    });
+
+    // Close the session and clear counts
+    const clearCounts = {};
+    BUOYS.forEach(n => { clearCounts[n] = 0; sessionCounts[n] = 0; });
+    update(ref(db, 'sessionCounts'), clearCounts);
+    update(ref(db, 'activeSession'), { active: false });
+    document.getElementById('closeSessionModal').classList.remove('open');
+    showToast('🍻 Session closed — all updated!');
   }
 
   // --- Add Punishment ---
@@ -604,181 +719,159 @@
     document.getElementById('customRow').classList.remove('visible');
   }
 
-  // --- Pub Night Settle Up ---
-  function openPubNight() {
-    const debts = calcDebts();
-    const list = document.getElementById('pubNightList');
-    if (!debts.length) {
-      list.innerHTML = '<div class="empty-state" style="color:var(--green)">🎉 All square! No one owes anything.</div>';
-    } else {
-      list.innerHTML = debts.map(d => {
-        const remaining = d.amount;
-        return '<div class="settle-row">' +
-          '<div class="settle-names">' +
-            '<span style="color:var(--red);font-weight:700">' + esc(d.debtor) + '</span>' +
-            '<span style="color:var(--border)"> owes </span>' +
-            '<span style="color:var(--amber);font-weight:700">' + esc(d.creditor) + '</span>' +
-          '</div>' +
-          '<span class="settle-amount">' + remaining + ' 🍺</span>' +
-          '<div class="settle-actions">' +
-            '<input class="settle-input" type="number" min="1" step="1" value="' + remaining + '" id="pi-' + d.debtor.replace(/\s/g,'_') + '-' + d.creditor.replace(/\s/g,'_') + '">' +
-            '<button class="settle-btn settle-btn-full" data-action="settlePairFull" data-debtor="' + esc(d.debtor) + '" data-creditor="' + esc(d.creditor) + '" data-amount="' + remaining + '">✓ Paid</button>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-      // Also show unpaid punishments
-      const unpaidPunish = Object.entries(punishments).filter(([,p]) => p.paid !== true);
-      if (unpaidPunish.length) {
-        list.innerHTML += '<div style="margin-top:16px;font-size:0.7rem;letter-spacing:2px;color:var(--border);text-transform:uppercase;margin-bottom:8px">⚡ Outstanding Punishments</div>' +
-          unpaidPunish.map(([id, p]) => {
-            const remaining = p.amount - (p.paidPartial || 0);
-            return '<div class="settle-row">' +
-              '<div class="settle-names"><span style="color:var(--punish-light);font-weight:700">' + esc(p.name) + '</span><span style="color:var(--border)"> must drink</span></div>' +
-              '<span class="settle-amount" style="color:var(--punish-light)">' + remaining + ' 🍺</span>' +
-              '<div class="settle-actions">' +
-                '<button class="settle-btn settle-btn-full" data-action="drinkPunish" data-id="' + id + '">🍺 Done</button>' +
-                '<button class="settle-btn settle-btn-partial" data-action="partialPunish" data-id="' + id + '">½ Part</button>' +
-              '</div>' +
-            '</div>';
-          }).join('');
-      }
-    }
-    document.getElementById('pubNightModal').classList.add('open');
+  // --- Add Bet ---
+  function addBet() {
+    const bettor = v('bettor'), opponent = v('opponent'), description = v('description');
+    const amount = Math.round(parseFloat(document.getElementById('amount').value) || 1);
+    const category = document.getElementById('category').value;
+    const witness1 = v('witness1'), witness2 = v('witness2');
+    if (!bettor) { showToast('Who is proposing?', true); return; }
+    if (!opponent) { showToast('Who is the bet against?', true); return; }
+    if (!description) { showToast('What is the bet?', true); return; }
+    push(ref(db, 'bets'), { type: 'bet', bettor, opponent, description, amount, category, witness1: witness1 || null, witness2: witness2 || null, status: 'pending', createdAt: new Date().toISOString() });
+    showToast('📨 Bet proposed — waiting for ' + opponent + ' to accept');
+    ['description','witness1','witness2'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('amount').value = '1';
   }
 
-  function settlePair(debtor, creditor, amount) {
-    // Read the input field for custom amount
-    const inputId = 'pi-' + debtor.replace(/\s/g,'_') + '-' + creditor.replace(/\s/g,'_');
-    const inputEl = document.getElementById(inputId);
-    const actualAmount = inputEl ? Math.round(parseFloat(inputEl.value) || amount) : Math.round(amount);
+  function acceptBet(id) { update(ref(db, 'bets/' + id), { status: 'open', acceptedAt: new Date().toISOString() }); showToast('✅ Bet accepted!'); }
+  function declineBet(id) { update(ref(db, 'bets/' + id), { status: 'declined' }); showToast('❌ Bet declined'); }
 
-    const logKey = push(ref(db, 'beerLog'), {
-      text: debtor + ' settled ' + actualAmount + ' 🍺 with ' + creditor,
-      amount: actualAmount, createdAt: new Date().toISOString(),
-      undoType: 'settle', undoDebtor: debtor, undoCreditor: creditor
-    }).key;
-
-    // Only mark bets between this specific pair
-    let remaining = actualAmount;
-    Object.entries(bets).forEach(([id, b]) => {
-      if (b.paid || remaining <= 0) return;
-      const debtorOwesCreditor =
-        (b.status === 'lost' && b.bettor === debtor && b.opponent === creditor) ||
-        (b.status === 'won' && b.opponent === debtor && b.bettor === creditor);
-      if (!debtorOwesCreditor) return;
-      const owed = b.amount - (b.paidPartial || 0);
-      if (remaining >= owed) { update(ref(db, 'bets/' + id), { paid: true, paidAt: new Date().toISOString(), logKey }); remaining -= owed; }
-      else { update(ref(db, 'bets/' + id), { paidPartial: (b.paidPartial || 0) + remaining, logKey }); remaining = 0; }
-    });
-
-    showToast('🍻 ' + debtor + ' — ' + actualAmount + ' 🍺 logged!');
-    openPubNight();
+  function markBet(id, status) {
+    const b = bets[id]; if (!b) return;
+    update(ref(db, 'bets/' + id), { status, resolvedAt: status !== 'open' ? new Date().toISOString() : null });
+    if (status === 'won') showToast('🏆 ' + b.bettor + ' wins! ' + b.opponent + ' owes ' + b.amount + ' 🍺');
+    else if (status === 'lost') showToast('😬 ' + b.bettor + ' lost — owes ' + b.amount + ' 🍺');
+    else showToast('↩ Bet reopened');
   }
 
-  // --- Undo log entry ---
+  // --- Undo log ---
   function undoLog(logId) {
-    if (!confirm('Undo this entry? The debt will be restored as unpaid.')) return;
+    if (!confirm('Undo this log entry? Credits and debt payments will be reversed.')) return;
     const entry = beerLog[logId]; if (!entry) return;
 
-    // Helper — clears paid status on a bet
-    const restoreBet = (id) => update(ref(db, 'bets/' + id), { paid: null, paidAt: null, logKey: null, paidPartial: null });
-    const restorePunish = (id) => update(ref(db, 'punishments/' + id), { paid: null, paidAt: null, logKey: null, paidPartial: null });
+    if (entry.undoType === 'session' && entry.sessionName) {
+      const name = entry.sessionName;
+      const drunk = entry.sessionDrunk || 0;
 
-    if (entry.undoType === 'bet' && entry.undoBetId) {
-      restoreBet(entry.undoBetId);
-    }
-    else if (entry.undoType === 'punish' && entry.undoPunishId) {
-      restorePunish(entry.undoPunishId);
-    }
-    else if (entry.undoType === 'betPartial' && entry.undoBetId) {
-      const b = bets[entry.undoBetId];
-      if (b) {
-        const restoredPartial = Math.max(0, (b.paidPartial || 0) - (entry.partialAmount || 0));
-        update(ref(db, 'bets/' + entry.undoBetId), { paidPartial: restoredPartial || null, paid: null, paidAt: null });
-      }
-    }
-    else if (entry.undoType === 'punishPartial' && entry.undoPunishId) {
-      const p = punishments[entry.undoPunishId];
-      if (p) {
-        const restoredPartial = Math.max(0, (p.paidPartial || 0) - (entry.partialAmount || 0));
-        update(ref(db, 'punishments/' + entry.undoPunishId), { paidPartial: restoredPartial || null, paid: null, paidAt: null });
-      }
-    }
-    else if (entry.undoType === 'settle') {
-      // Restore all bets and punishments linked to this log entry
-      Object.entries(bets).forEach(([id, b]) => { if (b.logKey === logId) restoreBet(id); });
-      Object.entries(punishments).forEach(([id, p]) => { if (p.logKey === logId) restorePunish(id); });
-    }
-    else {
-      // Fallback — scan everything with this logKey
-      Object.entries(bets).forEach(([id, b]) => { if (b.logKey === logId) restoreBet(id); });
-      Object.entries(punishments).forEach(([id, p]) => { if (p.logKey === logId) restorePunish(id); });
+      // Remove credit that was added (surplus after debts)
+      const currentCredit = (credits[name] && credits[name].amount) || 0;
+      const owed = calcOwedByPerson(name); // current owed AFTER session applied
+      // Credit added = drunk - originalOwed. Since we don't store original owed, we reverse what we can:
+      // Reverse: set credit back by subtracting what would have been credited
+      const creditAdded = Math.max(0, drunk - (owed + (currentCredit > 0 ? currentCredit : 0)));
+      const newCredit = Math.max(0, currentCredit - Math.max(0, drunk - (calcOwedBeforeSession(name, drunk))));
+      update(ref(db, 'credits/' + name), { amount: Math.max(0, currentCredit - drunk), name });
+
+      // Reopen bets/punishments that got fully paid in this session (find ones paid recently)
+      // We mark them unpaid — simpler and reliable
+      Object.entries(bets).forEach(([id, b]) => {
+        if (b.paidAt && b.paidAt >= (entry.createdAt || '') && b.paid === true) {
+          const isThisPerson = (b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name);
+          if (isThisPerson) update(ref(db, 'bets/' + id), { paid: null, paidAt: null, paidPartial: null });
+        }
+        // Also reset partial payments made during session
+        if (b.paidPartial && !b.paid) {
+          const isThisPerson = (b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name);
+          if (isThisPerson) update(ref(db, 'bets/' + id), { paidPartial: null });
+        }
+      });
+      Object.entries(punishments).forEach(([id, p]) => {
+        if (p.paidAt && p.paidAt >= (entry.createdAt || '') && p.paid === true && p.name === name) {
+          update(ref(db, 'punishments/' + id), { paid: null, paidAt: null, paidPartial: null });
+        }
+        if (p.paidPartial && !p.paid && p.name === name) {
+          update(ref(db, 'punishments/' + id), { paidPartial: null });
+        }
+      });
     }
 
     remove(ref(db, 'beerLog/' + logId));
-    showToast('↩ Entry undone — debt restored');
+    showToast('↩ Session entry undone — debts restored');
   }
 
-  // --- Calc debts ---
-  function calcDebts() {
-    const net = {};
-    const ensure = (a, b) => { if (!net[a]) net[a] = {}; if (!net[a][b]) net[a][b] = 0; };
-    Object.values(bets).forEach(b => {
-      if (b.paid === true) return;
-      const rem = b.amount - (b.paidPartial || 0);
-      if (rem <= 0) return;
-      if (b.status === 'lost') { ensure(b.bettor, b.opponent); net[b.bettor][b.opponent] += rem; }
-      if (b.status === 'won') { ensure(b.opponent, b.bettor); net[b.opponent][b.bettor] += rem; }
-    });
-    const result = [];
-    Object.entries(net).forEach(([debtor, creditors]) => Object.entries(creditors).forEach(([creditor, amount]) => { if (amount > 0) result.push({ debtor, creditor, amount: Math.round(amount) }); }));
-    return result.sort((a, b) => b.amount - a.amount);
+  function calcOwedBeforeSession(name, sessionDrunk) {
+    // Estimate what was owed before session by adding back what was paid
+    return calcOwedByPerson(name) + sessionDrunk;
   }
 
   // --- Leaderboard ---
   function buildLeaderboard() {
     const players = {};
-    const ensure = n => { if (!players[n]) players[n] = { name: n, beers: 0, wins: 0, losses: 0, open: 0, punishments: 0, streak: 0, lastResults: [], beersDrunk: 0 }; };
+    const ensure = n => { if (!players[n]) players[n] = { name: n, beers: 0, wins: 0, losses: 0, open: 0, punishments: 0, punishBeers: 0, streak: 0, lastResults: [], beersDrunk: 0, biggestWin: 0, biggestLoss: 0, fastestPayDays: [], biggestSession: 0 }; };
     Object.values(bets).forEach(b => {
       if (b.status === 'pending' || b.status === 'declined') return;
       ensure(b.bettor); ensure(b.opponent);
       if (b.status === 'won') {
-        players[b.opponent].beers -= (b.amount - (b.paidPartial || 0));
-        players[b.opponent].losses++; players[b.bettor].wins++;
+        players[b.opponent].beers -= (b.amount - (b.paidPartial || 0)); players[b.opponent].losses++; players[b.bettor].wins++;
         players[b.bettor].lastResults.unshift('W'); players[b.opponent].lastResults.unshift('L');
+        players[b.bettor].biggestWin = Math.max(players[b.bettor].biggestWin, b.amount);
+        players[b.opponent].biggestLoss = Math.max(players[b.opponent].biggestLoss, b.amount);
+        // Punctual payer: how quickly did the loser pay after resolving?
+        if (b.paid === true && b.resolvedAt && b.paidAt) {
+          const days = Math.round((new Date(b.paidAt) - new Date(b.resolvedAt)) / 86400000);
+          players[b.opponent].fastestPayDays.push(days);
+        }
       } else if (b.status === 'lost') {
-        players[b.bettor].beers -= (b.amount - (b.paidPartial || 0));
-        players[b.bettor].losses++; players[b.opponent].wins++;
+        players[b.bettor].beers -= (b.amount - (b.paidPartial || 0)); players[b.bettor].losses++; players[b.opponent].wins++;
         players[b.bettor].lastResults.unshift('L'); players[b.opponent].lastResults.unshift('W');
+        players[b.opponent].biggestWin = Math.max(players[b.opponent].biggestWin, b.amount);
+        players[b.bettor].biggestLoss = Math.max(players[b.bettor].biggestLoss, b.amount);
+        if (b.paid === true && b.resolvedAt && b.paidAt) {
+          const days = Math.round((new Date(b.paidAt) - new Date(b.resolvedAt)) / 86400000);
+          players[b.bettor].fastestPayDays.push(days);
+        }
       } else { players[b.bettor].open++; players[b.opponent].open++; }
     });
     Object.values(punishments).forEach(p => {
       ensure(p.name);
       players[p.name].beers -= (p.paid === true ? 0 : (p.amount - (p.paidPartial || 0)));
       players[p.name].punishments++;
+      players[p.name].punishBeers += p.amount;
     });
-    // Calc streak and beers drunk from log
+    // Add credits to balance
+    Object.values(credits).forEach(c => { if (c.name) { ensure(c.name); players[c.name].beers += (c.amount || 0); } });
+    // Calc beers drunk and biggest session from log
     Object.values(beerLog).forEach(l => {
-      const match = l.text.match(/^(.+?) (drank|settled)/);
-      if (match) { const name = match[1]; ensure(name); players[name].beersDrunk += (l.amount || 0); }
+      if (l.undoType === 'session' && l.sessionName) {
+        ensure(l.sessionName);
+        players[l.sessionName].beersDrunk += (l.sessionDrunk || 0);
+        players[l.sessionName].biggestSession = Math.max(players[l.sessionName].biggestSession, l.sessionDrunk || 0);
+      }
     });
     Object.values(players).forEach(p => {
       let streak = 0;
       for (const r of p.lastResults) { if (r === 'W') streak++; else break; }
       p.streak = streak;
+      p.avgPayDays = p.fastestPayDays.length ? Math.round(p.fastestPayDays.reduce((s,d)=>s+d,0) / p.fastestPayDays.length) : null;
     });
-    return Object.values(players).sort((a, b) => a.beers - b.beers);
+    return Object.values(players).sort((a, b) => b.beers - a.beers);
   }
 
   // --- Render ---
-  function render() { renderLeaderboard(); renderStats(); renderBets(); renderPunishments(); renderHof(); renderTab(); }
+  function render() { renderLeaderboard(); renderStats(); renderBets(); renderPunishments(); renderHof(); renderTab(); renderPubSession(); }
 
   function renderTab() {
-    const debts = calcDebts();
-    const total = debts.reduce((s, d) => s + d.amount, 0);
-    const unpaidPunish = Object.values(punishments).filter(p => p.paid !== true).reduce((s, p) => s + (p.amount - (p.paidPartial || 0)), 0);
-    document.getElementById('tabNumber').textContent = Math.round(total + unpaidPunish);
-    document.getElementById('tabBreakdown').textContent = debts.length + ' bet debt' + (debts.length !== 1 ? 's' : '') + (unpaidPunish > 0 ? ' + ' + Math.round(unpaidPunish) + ' punishment beers' : '');
+    const debts = calcAllDebts();
+    document.getElementById('tabNumber').textContent = debts.total;
+    const parts = [];
+    if (debts.betDebt > 0) parts.push(debts.betDebt + ' from bets');
+    if (debts.punishDebt > 0) parts.push(debts.punishDebt + ' from punishments');
+    document.getElementById('tabBreakdown').textContent = parts.length ? parts.join(' · ') : 'All square! 🎉';
+  }
+
+  function calcAllDebts() {
+    let betDebt = 0, punishDebt = 0;
+    Object.values(bets).forEach(b => {
+      if (b.paid === true) return;
+      const rem = b.amount - (b.paidPartial || 0);
+      if (rem > 0 && (b.status === 'won' || b.status === 'lost')) betDebt += rem;
+    });
+    Object.values(punishments).forEach(p => {
+      if (p.paid === true) return;
+      punishDebt += (p.amount - (p.paidPartial || 0));
+    });
+    return { betDebt: Math.round(betDebt), punishDebt: Math.round(punishDebt), total: Math.round(betDebt + punishDebt) };
   }
 
   function renderLeaderboard() {
@@ -804,75 +897,68 @@
 
   function renderStats() {
     const bArr = Object.values(bets);
-    const pending = bArr.filter(b => b.status === 'pending').length;
-    const active = bArr.filter(b => b.status === 'open').length;
-    const won = bArr.filter(b => b.status === 'won').length;
-    const lost = bArr.filter(b => b.status === 'lost').length;
     document.getElementById('statsBar').innerHTML =
       '<div class="stat-pill"><strong>' + bArr.length + '</strong>Total</div>' +
-      '<div class="stat-pill"><strong style="color:#60a5fa">' + pending + '</strong>Pending</div>' +
-      '<div class="stat-pill"><strong style="color:var(--amber)">' + active + '</strong>Active</div>' +
-      '<div class="stat-pill"><strong style="color:var(--green)">' + won + '</strong>Won</div>' +
-      '<div class="stat-pill"><strong style="color:var(--red)">' + lost + '</strong>Lost</div>';
+      '<div class="stat-pill"><strong style="color:#60a5fa">' + bArr.filter(b=>b.status==='pending').length + '</strong>Pending</div>' +
+      '<div class="stat-pill"><strong style="color:var(--amber)">' + bArr.filter(b=>b.status==='open').length + '</strong>Active</div>' +
+      '<div class="stat-pill"><strong style="color:var(--green)">' + bArr.filter(b=>b.status==='won').length + '</strong>Won</div>' +
+      '<div class="stat-pill"><strong style="color:var(--red)">' + bArr.filter(b=>b.status==='lost').length + '</strong>Lost</div>';
   }
 
   function renderBets() {
     const el = document.getElementById('betsList');
     let items = Object.entries(bets).map(([id, b]) => ({...b, id}));
     if (currentFilter !== 'all') items = items.filter(b => b.status === currentFilter);
-    items.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+    items.sort((a, b) => (b.createdAt||'').localeCompare(a.createdAt||''));
     if (!items.length) { el.innerHTML = '<div class="empty-state">No bets here.</div>'; return; }
-    el.innerHTML = items.map(b => renderBetCard(b)).join('');
-  }
-
-  function renderBetCard(b) {
-    const catEmoji = {footy:'🏉', general:'🎲', sport:'⚽', misc:'🤷'}[b.category] || '🎲';
-    const witnesses = [b.witness1, b.witness2].filter(Boolean);
-    const isPaid = b.paid === true;
-    const paidPartial = b.paidPartial || 0;
-    const remaining = b.amount - paidPartial;
-    let actions = '';
-    if (b.status === 'pending') {
-      actions = '<button class="action-btn btn-accept" data-action="acceptBet" data-id="' + b.id + '">✓ Accept</button><button class="action-btn btn-decline" data-action="declineBet" data-id="' + b.id + '">✗ Decline</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="' + b.id + '">🗑</button>';
-    } else if (b.status === 'open') {
-      actions = '<button class="action-btn btn-won" data-action="won" data-id="' + b.id + '">✓ Won</button><button class="action-btn btn-lost" data-action="lost" data-id="' + b.id + '">✗ Lost</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="' + b.id + '">🗑</button>';
-    } else if ((b.status === 'won' || b.status === 'lost') && !isPaid) {
-      actions = '<button class="action-btn btn-drink" data-action="drinkBet" data-id="' + b.id + '">🍺 Drank</button><button class="action-btn btn-partial" data-action="partialBet" data-id="' + b.id + '">½ Part</button><button class="action-btn btn-reopen" data-action="reopen" data-id="' + b.id + '">↩</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="' + b.id + '">🗑</button>';
-    } else {
-      actions = '<button class="action-btn btn-reopen" data-action="reopen" data-id="' + b.id + '">↩ Reopen</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="' + b.id + '">🗑</button>';
-    }
-    return '<div class="bet-card ' + b.status + (isPaid ? '" style="opacity:0.5' : '') + '">' +
-      '<div class="bet-header"><span class="bet-bettor">' + esc(b.bettor) + '</span><span class="bet-vs">vs</span><span class="bet-opponent">' + esc(b.opponent) + '</span></div>' +
-      '<div class="bet-desc">' + esc(b.description) + '</div>' +
-      '<div class="bet-meta">' +
-        '<span class="tag tag-' + b.status + '">' + b.status.toUpperCase() + (isPaid ? ' · PAID' : '') + '</span>' +
-        '<span class="bet-amount">' + (paidPartial > 0 ? remaining + '/' + b.amount : b.amount) + ' 🍺</span>' +
-        '<span class="bet-amount">' + catEmoji + ' ' + b.category + '</span>' +
-        (witnesses.length ? '<span class="bet-witnesses">👁 ' + witnesses.map(esc).join(', ') + '</span>' : '') +
-        '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">' + fmtDate(b.createdAt) + '</span>' +
-      '</div>' +
-      '<div class="bet-actions">' + actions + '</div>' +
-    '</div>';
+    el.innerHTML = items.map(b => {
+      const catEmoji = {footy:'🏉',general:'🎲',sport:'⚽',misc:'🤷'}[b.category]||'🎲';
+      const witnesses = [b.witness1,b.witness2].filter(Boolean);
+      const isPaid = b.paid === true;
+      const paidPartial = b.paidPartial || 0;
+      const remaining = b.amount - paidPartial;
+      let actions = '';
+      if (b.status === 'pending') {
+        actions = '<button class="action-btn btn-accept" data-action="acceptBet" data-id="'+b.id+'">✓ Accept</button><button class="action-btn btn-decline" data-action="declineBet" data-id="'+b.id+'">✗ Decline</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      } else if (b.status === 'open') {
+        actions = '<button class="action-btn btn-won" data-action="won" data-id="'+b.id+'">✓ Won</button><button class="action-btn btn-lost" data-action="lost" data-id="'+b.id+'">✗ Lost</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      } else if ((b.status==='won'||b.status==='lost') && !isPaid) {
+        actions = '<span style="font-size:0.7rem;color:var(--border)">Pay via Pub Session</span><button class="action-btn btn-reopen" data-action="reopen" data-id="'+b.id+'">↩</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      } else {
+        actions = '<button class="action-btn btn-reopen" data-action="reopen" data-id="'+b.id+'">↩ Reopen</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      }
+      return '<div class="bet-card '+b.status+(isPaid?'" style="opacity:0.5':'')+'">' +
+        '<div class="bet-header"><span class="bet-bettor">'+esc(b.bettor)+'</span><span class="bet-vs">vs</span><span class="bet-opponent">'+esc(b.opponent)+'</span></div>' +
+        '<div class="bet-desc">'+esc(b.description)+'</div>' +
+        '<div class="bet-meta">' +
+          '<span class="tag tag-'+b.status+'">'+b.status.toUpperCase()+(isPaid?' · PAID':'')+'</span>' +
+          '<span class="bet-amount">'+(paidPartial>0?remaining+'/'+b.amount:b.amount)+' 🍺</span>' +
+          '<span class="bet-amount">'+catEmoji+' '+b.category+'</span>' +
+          (witnesses.length?'<span class="bet-witnesses">👁 '+witnesses.map(esc).join(', ')+'</span>':'') +
+          '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">'+fmtDate(b.createdAt)+'</span>' +
+        '</div>' +
+        '<div class="bet-actions">'+actions+'</div>' +
+      '</div>';
+    }).join('');
   }
 
   function renderPunishments() {
     const el = document.getElementById('punishList');
-    const items = Object.entries(punishments).map(([id, p]) => ({...p, id})).sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+    const items = Object.entries(punishments).map(([id,p])=>({...p,id})).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
     if (!items.length) { el.innerHTML = '<div class="empty-state">No punishments yet.</div>'; return; }
     el.innerHTML = items.map(p => {
       const isPaid = p.paid === true;
-      const paidPartial = p.paidPartial || 0;
-      const remaining = p.amount - paidPartial;
-      return '<div class="punish-card' + (isPaid ? '" style="opacity:0.5' : '') + '">' +
-        '<div class="punish-header"><span class="punish-name">⚡ ' + esc(p.name) + '</span><span style="color:var(--border);font-size:0.75rem">issued by</span><span style="color:var(--border);font-family:\'Playfair Display\',serif;font-size:0.9rem">' + esc(p.issuer) + '</span></div>' +
-        '<div class="punish-desc">' + esc(p.reason) + '</div>' +
+      const remaining = p.amount - (p.paidPartial || 0);
+      return '<div class="punish-card'+(isPaid?'" style="opacity:0.5':'')+'">' +
+        '<div class="punish-header"><span class="punish-name">⚡ '+esc(p.name)+'</span><span style="color:var(--border);font-size:0.75rem">issued by</span><span style="color:var(--border);font-family:\'Playfair Display\',serif;font-size:0.9rem">'+esc(p.issuer)+'</span></div>' +
+        '<div class="punish-desc">'+esc(p.reason)+'</div>' +
         '<div class="bet-meta" style="margin-bottom:10px">' +
-          '<span class="tag tag-punish">PUNISHMENT' + (isPaid ? ' · DONE' : '') + '</span>' +
-          '<span class="bet-amount">' + (paidPartial > 0 ? remaining + '/' + p.amount : p.amount) + ' 🍺</span>' +
-          '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">' + fmtDate(p.createdAt) + '</span>' +
+          '<span class="tag tag-punish">PUNISHMENT'+(isPaid?' · DONE':'')+'</span>' +
+          '<span class="bet-amount">'+(p.paidPartial>0?remaining+'/'+p.amount:p.amount)+' 🍺</span>' +
+          (isPaid?'':'<span style="font-size:0.7rem;color:var(--border)">Pay via Pub Session</span>') +
+          '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">'+fmtDate(p.createdAt)+'</span>' +
         '</div>' +
-        (!isPaid ? '<div class="bet-actions"><button class="action-btn btn-drink" data-action="drinkPunish" data-id="' + p.id + '">🍺 Drank</button><button class="action-btn btn-partial" data-action="partialPunish" data-id="' + p.id + '">½ Part</button><button class="action-btn btn-delete" data-action="deletePunish" data-id="' + p.id + '">🗑</button></div>' :
-          '<div class="bet-actions"><button class="action-btn btn-delete" data-action="deletePunish" data-id="' + p.id + '">🗑</button></div>') +
+        '<div class="bet-actions"><button class="action-btn btn-delete" data-action="deletePunish" data-id="'+p.id+'">🗑</button></div>' +
       '</div>';
     }).join('');
   }
@@ -880,215 +966,180 @@
   function renderHof() {
     const lb = buildLeaderboard();
     const withBets = lb.filter(p => p.wins + p.losses > 0);
-    if (lb.length < 1) { document.getElementById('hofGrid').innerHTML = '<div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div>'; return; }
+    const el = document.getElementById('hofGrid');
+    if (!lb.length) { el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div>'; return; }
+
     const cards = [];
+
+    // Most Wins
     if (withBets.length) {
-      const topWinner = [...withBets].sort((a,b) => b.wins - a.wins)[0];
-      const biggestLoser = [...withBets].sort((a,b) => b.losses - a.losses)[0];
-      const bestStreak = [...withBets].sort((a,b) => b.streak - a.streak)[0];
-      cards.push({ emoji: '🏆', title: 'Most Wins', name: topWinner.name, stat: topWinner.wins + ' wins' });
-      cards.push({ emoji: '😭', title: 'Biggest Loser', name: biggestLoser.name, stat: biggestLoser.losses + ' losses' });
-      if (bestStreak.streak > 0) cards.push({ emoji: '🔥', title: 'Win Streak', name: bestStreak.name, stat: bestStreak.streak + ' in a row' });
+      const top = [...withBets].sort((a,b)=>b.wins-a.wins)[0];
+      if (top.wins > 0) cards.push({ emoji:'🏆', title:'Most Wins', name: top.name, stat: top.wins + ' wins' });
+
+      // Biggest Loser
+      const bigLose = [...withBets].sort((a,b)=>b.losses-a.losses)[0];
+      if (bigLose.losses > 0) cards.push({ emoji:'😭', title:'Biggest Loser', name: bigLose.name, stat: bigLose.losses + ' losses' });
+
+      // Win streak
+      const bestStreak = [...withBets].sort((a,b)=>b.streak-a.streak)[0];
+      if (bestStreak.streak > 1) cards.push({ emoji:'🔥', title:'Win Streak', name: bestStreak.name, stat: bestStreak.streak + ' in a row' });
+
+      // Biggest single bet won
+      const bigWin = [...lb].sort((a,b)=>b.biggestWin-a.biggestWin)[0];
+      if (bigWin && bigWin.biggestWin > 0) cards.push({ emoji:'💰', title:'Biggest Bet Won', name: bigWin.name, stat: bigWin.biggestWin + ' 🍺 in one bet' });
+
+      // Biggest single bet lost
+      const bigLoss = [...lb].sort((a,b)=>b.biggestLoss-a.biggestLoss)[0];
+      if (bigLoss && bigLoss.biggestLoss > 0) cards.push({ emoji:'💀', title:'Biggest Bet Lost', name: bigLoss.name, stat: bigLoss.biggestLoss + ' 🍺 in one bet' });
+
+      // Most punctual payer (lowest avg days to pay)
+      const payers = lb.filter(p => p.avgPayDays !== null);
+      if (payers.length) {
+        const quickest = [...payers].sort((a,b) => a.avgPayDays - b.avgPayDays)[0];
+        cards.push({ emoji:'⚡', title:'Most Punctual Payer', name: quickest.name, stat: quickest.avgPayDays === 0 ? 'Same day!' : quickest.avgPayDays + ' day avg' });
+      }
     }
-    const mostShamed = [...lb].sort((a,b) => b.punishments - a.punishments)[0];
-    if (mostShamed && mostShamed.punishments > 0) cards.push({ emoji: '⚡', title: 'Most Fined', name: mostShamed.name, stat: mostShamed.punishments + ' punishments' });
-    const mostDrunk = [...lb].sort((a,b) => b.beersDrunk - a.beersDrunk)[0];
-    if (mostDrunk && mostDrunk.beersDrunk > 0) cards.push({ emoji: '🍺', title: 'Most Beers Paid', name: mostDrunk.name, stat: mostDrunk.beersDrunk + ' 🍺 drunk' });
-    const mostOwed = [...lb].sort((a,b) => a.beers - b.beers)[0];
-    if (mostOwed && mostOwed.beers < 0) cards.push({ emoji: '💸', title: 'Most Owed', name: mostOwed.name, stat: Math.abs(mostOwed.beers) + ' 🍺 debt' });
-    if (!cards.length) { document.getElementById('hofGrid').innerHTML = '<div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div>'; return; }
-    document.getElementById('hofGrid').innerHTML = cards.map(c =>
-      '<div class="hof-card"><span class="hof-emoji">' + c.emoji + '</span><div class="hof-title">' + c.title + '</div><div class="hof-name">' + esc(c.name) + '</div><div class="hof-stat">' + c.stat + '</div></div>'
+
+    // Most Fined
+    const mostShamed = [...lb].sort((a,b)=>b.punishments-a.punishments)[0];
+    if (mostShamed && mostShamed.punishments > 0) cards.push({ emoji:'🚨', title:'Most Fined', name: mostShamed.name, stat: mostShamed.punishments + ' punishment' + (mostShamed.punishments !== 1 ? 's' : '') + ' · ' + mostShamed.punishBeers + ' 🍺' });
+
+    // Most beers consumed (all time)
+    const mostConsumed = [...lb].sort((a,b)=>b.beersDrunk-a.beersDrunk)[0];
+    if (mostConsumed && mostConsumed.beersDrunk > 0) cards.push({ emoji:'🍺', title:'Most Beers Consumed', name: mostConsumed.name, stat: mostConsumed.beersDrunk + ' 🍺 all time' });
+
+    // Biggest single session
+    const bigSession = [...lb].sort((a,b)=>b.biggestSession-a.biggestSession)[0];
+    if (bigSession && bigSession.biggestSession > 0) cards.push({ emoji:'🌊', title:'Biggest Session', name: bigSession.name, stat: bigSession.biggestSession + ' 🍺 in one night' });
+
+    // Longest outstanding unpaid debt
+    const now = new Date();
+    let longestDebtor = null, longestDays = 0;
+    Object.values(bets).forEach(b => {
+      if (b.paid === true) return;
+      if (b.status !== 'won' && b.status !== 'lost') return;
+      const debtor = b.status === 'lost' ? b.bettor : b.opponent;
+      const days = Math.round((now - new Date(b.resolvedAt || b.createdAt)) / 86400000);
+      if (days > longestDays) { longestDays = days; longestDebtor = debtor; }
+    });
+    Object.values(punishments).forEach(p => {
+      if (p.paid === true) return;
+      const days = Math.round((now - new Date(p.createdAt)) / 86400000);
+      if (days > longestDays) { longestDays = days; longestDebtor = p.name; }
+    });
+    if (longestDebtor) cards.push({ emoji:'⏳', title:'Longest Unpaid Debt', name: longestDebtor, stat: longestDays + ' day' + (longestDays !== 1 ? 's' : '') + ' overdue' });
+
+    if (!cards.length) { el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div>'; return; }
+    el.innerHTML = cards.map(c =>
+      '<div class="hof-card"><span class="hof-emoji">'+c.emoji+'</span><div class="hof-title">'+c.title+'</div><div class="hof-name">'+esc(c.name)+'</div><div class="hof-stat">'+c.stat+'</div></div>'
     ).join('');
   }
 
   function renderBeerLog() {
     const el = document.getElementById('beerLog');
-    const items = Object.entries(beerLog).map(([id, l]) => ({...l, id})).sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
-    if (!items.length) { el.innerHTML = '<div class="empty-state">No beers logged yet. Get drinking.</div>'; return; }
+    const items = Object.entries(beerLog).map(([id,l])=>({...l,id})).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+    if (!items.length) { el.innerHTML = '<div class="empty-state">No beers logged yet.</div>'; return; }
     el.innerHTML = items.map(l =>
       '<div class="beer-log-item">' +
         '<span style="font-size:1.2rem">🍺</span>' +
-        '<span class="beer-log-text">' + esc(l.text) + '</span>' +
-        '<span class="beer-log-date">' + fmtDate(l.createdAt) + '</span>' +
-        '<button class="action-btn btn-reopen" style="font-size:0.6rem;padding:5px 8px" data-action="undoLog" data-id="' + l.id + '">↩</button>' +
+        '<span class="beer-log-text">'+esc(l.text)+'</span>' +
+        '<span class="beer-log-date">'+fmtDate(l.createdAt)+'</span>' +
+        '<button class="action-btn btn-reopen" style="font-size:0.6rem;padding:5px 8px;border-color:rgba(200,153,26,0.3);color:var(--border)" data-action="undoLog" data-id="'+l.id+'">↩</button>' +
       '</div>'
     ).join('');
   }
 
-  // =====================
-  // SPIN WHEEL
-  // =====================
-  const WHEEL_COLORS = ['#c8991a','#7c3aed','#e05252','#5cb85c','#60a5fa','#f472b6','#e8b84b','#a78bfa','#34d399','#fb923c'];
-
+  // --- SPIN WHEEL ---
   function openSpin() {
-    // Pre-populate with known players from leaderboard
-    if (spinPlayers.length === 0) {
-      const lb = buildLeaderboard();
-      spinPlayers = lb.map(p => p.name);
-    }
-    renderChips();
-    drawWheel();
+    if (spinPlayers.length === 0) spinPlayers = [...BUOYS];
+    renderChips(); drawWheel();
     document.getElementById('spinResult').textContent = '';
     document.getElementById('spinModal').classList.add('open');
   }
 
   function addSpinPlayer() {
     const input = document.getElementById('spinPlayerInput');
-    const name = (input.value || '').trim();
+    const name = (input.value||'').trim();
     if (!name) return;
     if (!spinPlayers.includes(name)) spinPlayers.push(name);
     input.value = '';
-    renderChips();
-    drawWheel();
+    renderChips(); drawWheel();
   }
 
   function renderChips() {
-    document.getElementById('playerChips').innerHTML = spinPlayers.map((p, i) =>
-      '<div class="player-chip">' + esc(p) + '<span class="chip-remove" data-action="removeSpinPlayer" data-idx="' + i + '">×</span></div>'
+    document.getElementById('playerChips').innerHTML = spinPlayers.map((p,i) =>
+      '<div class="player-chip">'+esc(p)+'<span class="chip-remove" data-action="removeSpinPlayer" data-idx="'+i+'">×</span></div>'
     ).join('') || '<div style="color:var(--border);font-size:0.75rem;padding:8px">Add players above</div>';
   }
 
   function drawWheel(highlightIdx) {
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
-    const cx = 140, cy = 140, r = 130;
-    ctx.clearRect(0, 0, 280, 280);
-
+    const cx=140,cy=140,r=130;
+    ctx.clearRect(0,0,280,280);
     if (!spinPlayers.length) {
-      ctx.fillStyle = 'rgba(255,255,255,0.05)';
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'rgba(196,169,106,0.4)';
-      ctx.font = '14px DM Mono, monospace';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('Add players', cx, cy);
+      ctx.fillStyle='rgba(255,255,255,0.05)'; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(196,169,106,0.4)'; ctx.font='14px DM Mono,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('Add players',cx,cy);
       return;
     }
-
-    const n = spinPlayers.length;
-    const arc = (2 * Math.PI) / n;
-
-    spinPlayers.forEach((name, i) => {
-      const start = i * arc - Math.PI / 2;
-      const end = start + arc;
-      const isHighlighted = i === highlightIdx;
-
-      // Slice
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, r, start, end);
-      ctx.closePath();
-      ctx.fillStyle = isHighlighted ? '#fff' : WHEEL_COLORS[i % WHEEL_COLORS.length];
-      ctx.fill();
-      ctx.strokeStyle = '#1c0f05';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Text
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(start + arc / 2);
-      ctx.textAlign = 'right';
-      ctx.fillStyle = isHighlighted ? '#1c0f05' : '#1c0f05';
-      ctx.font = 'bold ' + Math.min(14, Math.max(9, 100 / n)) + 'px DM Mono, monospace';
-      ctx.fillText(name.length > 10 ? name.slice(0, 9) + '…' : name, r - 8, 4);
-      ctx.restore();
+    const n=spinPlayers.length, arc=(2*Math.PI)/n;
+    spinPlayers.forEach((name,i) => {
+      const s=i*arc-Math.PI/2, e=s+arc;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+      ctx.fillStyle=i===highlightIdx?'#fff':WHEEL_COLORS[i%WHEEL_COLORS.length]; ctx.fill();
+      ctx.strokeStyle='#1c0f05'; ctx.lineWidth=2; ctx.stroke();
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+arc/2); ctx.textAlign='right';
+      ctx.fillStyle='#1c0f05'; ctx.font='bold '+Math.min(14,Math.max(9,100/n))+'px DM Mono,monospace';
+      ctx.fillText(name.length>10?name.slice(0,9)+'…':name,r-8,4); ctx.restore();
     });
-
-    // Center circle
-    ctx.beginPath();
-    ctx.arc(cx, cy, 18, 0, Math.PI * 2);
-    ctx.fillStyle = '#1c0f05';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(200,153,26,0.6)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fillStyle='#1c0f05'; ctx.fill();
+    ctx.strokeStyle='rgba(200,153,26,0.6)'; ctx.lineWidth=2; ctx.stroke();
   }
 
   function doSpin() {
-    if (isSpinning || spinPlayers.length < 2) {
-      if (spinPlayers.length < 2) showToast('Add at least 2 players!', true);
-      return;
-    }
-    isSpinning = true;
-    document.getElementById('spinGoBtn').disabled = true;
-    document.getElementById('spinResult').textContent = '🎰 Spinning...';
-
-    const n = spinPlayers.length;
-    const winnerIdx = Math.floor(Math.random() * n);
-    const arcDeg = 360 / n;
-
-    // Pointer is at top (270deg in canvas terms, or -90deg).
-    // Each slice i occupies [i*arcDeg, (i+1)*arcDeg] measured from top going clockwise.
-    // To land slice winnerIdx under the pointer, we need the wheel to rotate so that
-    // the MIDDLE of slice winnerIdx is at the top.
-    // Middle of slice winnerIdx (from top, clockwise) = winnerIdx * arcDeg + arcDeg/2
-    // We want that at 0 (top), so rotate by -(winnerIdx * arcDeg + arcDeg/2)
-    // Add 5 full spins for drama, keep it positive
-    const sliceMid = winnerIdx * arcDeg + arcDeg / 2;
-    const targetAngle = 360 * 6 - sliceMid;
-
-    const duration = 4500;
-    const startTime = performance.now();
-
+    if (isSpinning||spinPlayers.length<2) { if(spinPlayers.length<2) showToast('Add at least 2 players!',true); return; }
+    isSpinning=true;
+    document.getElementById('spinGoBtn').disabled=true;
+    document.getElementById('spinResult').textContent='🎰 Spinning...';
+    const n=spinPlayers.length, winnerIdx=Math.floor(Math.random()*n);
+    const arcDeg=360/n, sliceMid=winnerIdx*arcDeg+arcDeg/2;
+    const targetAngle=360*6-sliceMid;
+    const duration=4500, startTime=performance.now();
     function animate(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      const current = targetAngle * eased;
-
-      const canvas = document.getElementById('wheelCanvas');
-      const ctx = canvas.getContext('2d');
-      const cx = 140, cy = 140, r = 130;
-      ctx.clearRect(0, 0, 280, 280);
-
-      const arcRad = (2 * Math.PI) / n;
-      const offsetRad = (current * Math.PI) / 180;
-
-      spinPlayers.forEach((name, i) => {
-        const s = i * arcRad - Math.PI / 2 + offsetRad;
-        const e = s + arcRad;
-        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, s, e); ctx.closePath();
-        ctx.fillStyle = WHEEL_COLORS[i % WHEEL_COLORS.length];
-        ctx.fill(); ctx.strokeStyle = '#1c0f05'; ctx.lineWidth = 2; ctx.stroke();
-        ctx.save(); ctx.translate(cx, cy); ctx.rotate(s + arcRad / 2);
-        ctx.textAlign = 'right'; ctx.fillStyle = '#1c0f05';
-        ctx.font = 'bold ' + Math.min(14, Math.max(9, 100 / n)) + 'px DM Mono, monospace';
-        ctx.fillText(name.length > 10 ? name.slice(0, 9) + '…' : name, r - 8, 4);
-        ctx.restore();
+      const elapsed=now-startTime, progress=Math.min(elapsed/duration,1);
+      const eased=1-Math.pow(1-progress,4), current=targetAngle*eased;
+      const canvas=document.getElementById('wheelCanvas'), ctx=canvas.getContext('2d');
+      const cx=140,cy=140,r=130; ctx.clearRect(0,0,280,280);
+      const arcRad=(2*Math.PI)/n, offsetRad=(current*Math.PI)/180;
+      spinPlayers.forEach((name,i) => {
+        const s=i*arcRad-Math.PI/2+offsetRad, e=s+arcRad;
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+        ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length]; ctx.fill(); ctx.strokeStyle='#1c0f05'; ctx.lineWidth=2; ctx.stroke();
+        ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+arcRad/2); ctx.textAlign='right'; ctx.fillStyle='#1c0f05';
+        ctx.font='bold '+Math.min(14,Math.max(9,100/n))+'px DM Mono,monospace';
+        ctx.fillText(name.length>10?name.slice(0,9)+'…':name,r-8,4); ctx.restore();
       });
-
-      ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI * 2);
-      ctx.fillStyle = '#1c0f05'; ctx.fill();
-      ctx.strokeStyle = 'rgba(200,153,26,0.6)'; ctx.lineWidth = 2; ctx.stroke();
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        isSpinning = false;
-        document.getElementById('spinGoBtn').disabled = false;
-        const winner = spinPlayers[winnerIdx];
-        document.getElementById('spinResult').textContent = '🍺 ' + winner + ' is buying the round!';
+      ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fillStyle='#1c0f05'; ctx.fill();
+      ctx.strokeStyle='rgba(200,153,26,0.6)'; ctx.lineWidth=2; ctx.stroke();
+      if (progress<1) { requestAnimationFrame(animate); }
+      else {
+        isSpinning=false; document.getElementById('spinGoBtn').disabled=false;
+        document.getElementById('spinResult').textContent='🍺 '+spinPlayers[winnerIdx]+' is buying the round!';
         drawWheel(winnerIdx);
       }
     }
-
     requestAnimationFrame(animate);
   }
 
   // --- Utils ---
-  function v(id) { return (document.getElementById(id).value || '').trim(); }
-  function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-  function fmtDate(iso) { if (!iso) return ''; try { return new Date(iso).toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' }); } catch(e) { return ''; } }
-
+  function v(id) { return (document.getElementById(id).value||'').trim(); }
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function fmtDate(iso) { if(!iso) return ''; try { return new Date(iso).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return ''; } }
   let toastTimer;
-  function showToast(msg, isError) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast' + (isError ? ' error' : '');
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  function showToast(msg,isError) {
+    const t=document.getElementById('toast'); t.textContent=msg;
+    t.className='toast'+(isError?' error':''); t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
   }
 </script>
 </body>
