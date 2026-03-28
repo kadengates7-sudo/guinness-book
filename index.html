@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guinness Book of Buoy Records</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --cream: #f5f0e8;
+    --stout: #1c0f05;
+    --gold: #c8991a;
+    --amber: #e8b84b;
+    --border: #c4a96a;
+    --punish: #7c3aed;
+    --punish-light: #a78bfa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--stout);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(200,153,26,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(200,153,26,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* BROWSER BANNER */
+  .browser-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f59e0b;
+    color: #1a1209;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    animation: pulse-banner 2s infinite;
+  }
+
+  @keyframes pulse-banner {
+    0%, 100% { box-shadow: 0 4px 20px rgba(245,158,11,0.4); }
+    50% { box-shadow: 0 4px 32px rgba(245,158,11,0.9); }
+  }
+
+  .browser-banner-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .browser-banner-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .browser-banner-text strong { font-size: 0.95rem; font-weight: 700; font-family: 'Playfair Display', serif; }
+  .browser-banner-text span { font-size: 0.78rem; opacity: 0.85; }
+  .browser-banner-close {
+    background: rgba(0,0,0,0.15); border: none; color: #1a1209;
+    font-size: 0.9rem; width: 28px; height: 28px; border-radius: 50%;
+    cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* SYNC STATUS */
+  .sync-status {
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: var(--border);
+    opacity: 0.7;
+  }
+
+  .sync-status.connected { color: #5cb85c; }
+  .sync-status.error { color: #e05252; }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 2px solid var(--gold);
+    position: relative;
+  }
+
+  header::after {
+    content: '🍺';
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    background: var(--stout);
+    padding: 0 12px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--amber);
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    color: var(--border);
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .leaderboard {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,153,26,0.3);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--amber);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .leaderboard-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .player-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(200,153,26,0.12);
+  }
+
+  .player-rank { font-size: 1.1rem; width: 28px; text-align: center; }
+  .player-name { flex: 1; font-size: 0.9rem; color: var(--cream); font-weight: 500; }
+  .player-record { font-size: 0.7rem; color: var(--border); text-align: right; line-height: 1.7; }
+  .player-balance { font-weight: 700; font-size: 1rem; min-width: 72px; text-align: right; }
+  .pos { color: #5cb85c; }
+  .neg { color: #e05252; }
+  .zero { color: var(--border); }
+
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid rgba(200,153,26,0.2);
+  }
+
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    color: var(--border);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .tab-btn.active { color: var(--amber); border-bottom-color: var(--gold); font-weight: 700; }
+  .tab-btn.punish-tab.active { color: var(--punish-light); border-bottom-color: var(--punish-light); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .panel-wrap {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,153,26,0.3);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  label {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--border);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  input, select {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(200,153,26,0.35);
+    border-radius: 7px;
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus, select:focus { border-color: var(--gold); }
+  select option { background: #2a1a08; }
+
+  .add-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--stout);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 15px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-height: 52px;
+  }
+
+  .add-btn:active { background: var(--amber); }
+  .add-btn.punish-btn { background: var(--punish); color: #fff; }
+  .add-btn.punish-btn:active { background: var(--punish-light); color: var(--stout); }
+
+  .custom-row { display: none; margin-bottom: 12px; }
+  .custom-row.visible { display: block; }
+
+  .list-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,153,26,0.3);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  .bets-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid rgba(200,153,26,0.3);
+    color: var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .filter-btn.active { background: var(--gold); color: var(--stout); border-color: var(--gold); font-weight: 700; }
+
+  .bet-card {
+    border: 1px solid rgba(200,153,26,0.15);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: start;
+    background: rgba(0,0,0,0.2);
+  }
+
+  .bet-card.won { border-left: 3px solid #5cb85c; }
+  .bet-card.lost { border-left: 3px solid #e05252; }
+  .bet-card.open { border-left: 3px solid var(--gold); }
+
+  .punish-card {
+    border: 1px solid rgba(124,58,237,0.25);
+    border-left: 3px solid var(--punish-light);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: start;
+    background: rgba(124,58,237,0.05);
+  }
+
+  .bet-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; align-items: center; }
+  .bet-desc { font-size: 0.88rem; color: var(--cream); font-weight: 500; line-height: 1.4; }
+  .bet-bettor { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--amber); font-weight: 700; }
+  .punish-bettor { color: var(--punish-light); }
+
+  .tag {
+    font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 4px; font-weight: 500;
+  }
+
+  .tag-open { background: rgba(200,153,26,0.2); color: var(--amber); }
+  .tag-won { background: rgba(92,184,92,0.2); color: #5cb85c; }
+  .tag-lost { background: rgba(224,82,82,0.2); color: #e05252; }
+  .tag-punish { background: rgba(124,58,237,0.25); color: var(--punish-light); }
+
+  .bet-amount { font-size: 0.8rem; color: var(--border); }
+  .bet-date { font-size: 0.65rem; color: rgba(196,169,106,0.5); }
+  .bet-actions { display: flex; gap: 6px; flex-direction: column; align-items: flex-end; }
+
+  .action-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 7px 12px;
+    border-radius: 5px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-height: 34px;
+    background: transparent;
+  }
+
+  .btn-won { border-color: #5cb85c; color: #5cb85c; }
+  .btn-won:active { background: rgba(92,184,92,0.2); }
+  .btn-lost { border-color: #e05252; color: #e05252; }
+  .btn-lost:active { background: rgba(224,82,82,0.2); }
+  .btn-delete { border-color: rgba(196,169,106,0.3); color: rgba(196,169,106,0.5); }
+  .btn-delete:active { border-color: #e05252; color: #e05252; }
+  .btn-reopen { border-color: var(--gold); color: var(--gold); }
+  .btn-reopen:active { background: rgba(200,153,26,0.2); }
+
+  .empty-state { text-align: center; color: var(--border); font-size: 0.8rem; padding: 32px 16px; opacity: 0.6; }
+
+  .stats-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+
+  .stat-pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,153,26,0.2);
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 0.72rem; color: var(--border);
+  }
+
+  .stat-pill strong { display: block; font-size: 1.1rem; color: var(--amber); font-family: 'Playfair Display', serif; }
+  .punish-count { background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.3); }
+  .punish-count strong { color: var(--punish-light); }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--gold); color: var(--stout);
+    font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 700;
+    padding: 12px 24px; border-radius: 8px;
+    transition: transform 0.3s ease; z-index: 100;
+    max-width: 90vw; text-align: center;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.error { background: #e05252; color: #fff; }
+
+  @media (max-width: 500px) {
+    .form-grid, .form-row, .form-row-2 { grid-template-columns: 1fr; }
+    .bet-card, .punish-card { grid-template-columns: 1fr; }
+    .bet-actions { flex-direction: row; flex-wrap: wrap; }
+    .tab-btn { padding: 8px 10px; font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- In-app browser warning -->
+  <div class="browser-banner" id="browserBanner" style="display:none">
+    <div class="browser-banner-icon">⚠️</div>
+    <div class="browser-banner-text">
+      <strong>Open in your browser for full access</strong>
+      <span>Tap ··· or ⋮ menu → "Open in Browser"</span>
+    </div>
+    <button class="browser-banner-close" data-action="closeBanner">✕</button>
+  </div>
+
+  <header>
+    <h1>Guinness Book of Buoy Records</h1>
+    <p class="subtitle">Settle your debts, gentlemen</p>
+  </header>
+
+  <div class="sync-status" id="syncStatus">⏳ connecting...</div>
+
+  <!-- LEADERBOARD -->
+  <div class="leaderboard">
+    <div class="section-title">⚖️ The Ledger</div>
+    <div class="leaderboard-list" id="leaderboard">
+      <div class="empty-state">No players yet</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-action="tab" data-tab="bets">🍺 Bets</button>
+    <button class="tab-btn punish-tab" data-action="tab" data-tab="punishments">⚡ Punishments</button>
+  </div>
+
+  <div class="panel-wrap">
+    <!-- BET FORM -->
+    <div class="tab-panel active" id="tab-bets">
+      <div class="section-title" style="margin-bottom:16px">➕ Log a Bet</div>
+      <div class="form-grid">
+        <div><label>Who's betting</label><input type="text" id="bettor" placeholder="Your name" autocomplete="off" autocorrect="off" autocapitalize="words"></div>
+        <div><label>Against</label><input type="text" id="opponent" placeholder="Their name" autocomplete="off" autocorrect="off" autocapitalize="words"></div>
+      </div>
+      <div style="margin-bottom:12px">
+        <label>The bet</label>
+        <input type="text" id="description" placeholder="e.g. Eagles win the flag 2026" autocomplete="off">
+      </div>
+      <div class="form-row">
+        <div><label>Beers 🍺</label><input type="number" id="amount" min="0.5" step="0.5" value="1" inputmode="decimal"></div>
+        <div>
+          <label>Category</label>
+          <select id="category">
+            <option value="footy">🏉 Footy</option>
+            <option value="general">🎲 General</option>
+            <option value="sport">⚽ Other Sport</option>
+            <option value="misc">🤷 Misc</option>
+          </select>
+        </div>
+        <div><label>Due date</label><input type="date" id="dueDate"></div>
+      </div>
+      <button class="add-btn" data-action="addBet">🍺 Lock It In</button>
+    </div>
+
+    <!-- PUNISHMENT FORM -->
+    <div class="tab-panel" id="tab-punishments">
+      <div class="section-title" style="margin-bottom:16px">⚡ Issue a Punishment</div>
+      <div class="form-row-2">
+        <div><label>Who copped it</label><input type="text" id="pName" placeholder="Their name" autocomplete="off" autocorrect="off" autocapitalize="words"></div>
+        <div><label>Issued by</label><input type="text" id="pIssuer" placeholder="Your name" autocomplete="off" autocorrect="off" autocapitalize="words"></div>
+      </div>
+      <div class="form-row-2">
+        <div>
+          <label>Reason</label>
+          <select id="pReason">
+            <option value="Poor communication">📵 Poor communication</option>
+            <option value="Not contributing">😴 Not contributing</option>
+            <option value="No show / poor excuse">🚪 No-show / poor excuse</option>
+            <option value="custom">✏️ Custom reason...</option>
+          </select>
+        </div>
+        <div><label>Beers 🍺</label><input type="number" id="pAmount" min="0.5" step="0.5" value="1" inputmode="decimal"></div>
+      </div>
+      <div class="custom-row" id="customRow">
+        <label>Custom reason</label>
+        <input type="text" id="pCustomReason" placeholder="Describe the crime..." autocomplete="off">
+      </div>
+      <button class="add-btn punish-btn" data-action="addPunishment">⚡ Hand It Down</button>
+    </div>
+  </div>
+
+  <!-- ACTIVITY LIST -->
+  <div class="list-section">
+    <div class="section-title">📋 All Activity</div>
+    <div class="stats-bar" id="statsBar"></div>
+    <div class="bets-controls">
+      <button class="filter-btn active" data-action="filter" data-filter="all">All</button>
+      <button class="filter-btn" data-action="filter" data-filter="open">Open</button>
+      <button class="filter-btn" data-action="filter" data-filter="won">Won</button>
+      <button class="filter-btn" data-action="filter" data-filter="lost">Lost</button>
+      <button class="filter-btn" data-action="filter" data-filter="punishment">⚡ Punishments</button>
+    </div>
+    <div id="betsList"><div class="empty-state">Nothing here yet.</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getDatabase, ref, push, update, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDQozR-X5fbWUuQ12JoN_a3jf-F1L9Lj30",
+    authDomain: "guinness-book-e59c1.firebaseapp.com",
+    databaseURL: "https://guinness-book-e59c1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "guinness-book-e59c1",
+    storageBucket: "guinness-book-e59c1.firebasestorage.app",
+    messagingSenderId: "608475080713",
+    appId: "1:608475080713:web:46d638fd63134b2c25b0d8"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let bets = {};
+  let punishments = {};
+  let currentFilter = 'all';
+
+  // --- In-app browser detection ---
+  const ua = navigator.userAgent || '';
+  const isInApp = /FBAN|FBAV|Instagram|Messenger|Twitter|LinkedIn|Line|WhatsApp|Snapchat|TikTok|MicroMessenger/.test(ua);
+  if (isInApp) document.getElementById('browserBanner').style.display = 'flex';
+
+  // --- Firebase listeners ---
+  const syncEl = document.getElementById('syncStatus');
+
+  onValue(ref(db, 'bets'), snap => {
+    bets = snap.val() || {};
+    render();
+    syncEl.textContent = '🟢 live — all changes sync instantly';
+    syncEl.className = 'sync-status connected';
+  }, err => {
+    syncEl.textContent = '🔴 connection error — check your internet';
+    syncEl.className = 'sync-status error';
+  });
+
+  onValue(ref(db, 'punishments'), snap => {
+    punishments = snap.val() || {};
+    render();
+  });
+
+  // --- Event delegation ---
+  document.addEventListener('click', function(e) {
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    e.preventDefault();
+    const action = el.dataset.action;
+    const id = el.dataset.id;
+
+    if (action === 'closeBanner') {
+      document.getElementById('browserBanner').style.display = 'none';
+    } else if (action === 'tab') {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('tab-' + el.dataset.tab).classList.add('active');
+    } else if (action === 'filter') {
+      currentFilter = el.dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      renderList();
+    } else if (action === 'addBet') { addBet(); }
+    else if (action === 'addPunishment') { addPunishment(); }
+    else if (action === 'won') { markBet(id, 'won'); }
+    else if (action === 'lost') { markBet(id, 'lost'); }
+    else if (action === 'reopen') { markBet(id, 'open'); }
+    else if (action === 'deleteBet') {
+      if (confirm('Delete this bet?')) {
+        remove(ref(db, 'bets/' + id));
+        showToast('Deleted');
+      }
+    } else if (action === 'deletePunishment') {
+      if (confirm('Delete this punishment?')) {
+        remove(ref(db, 'punishments/' + id));
+        showToast('Deleted');
+      }
+    }
+  });
+
+  document.addEventListener('change', function(e) {
+    if (e.target.id === 'pReason') {
+      document.getElementById('customRow').classList.toggle('visible', e.target.value === 'custom');
+    }
+  });
+
+  // --- Add Bet ---
+  function addBet() {
+    const bettor = (document.getElementById('bettor').value || '').trim();
+    const opponent = (document.getElementById('opponent').value || '').trim();
+    const description = (document.getElementById('description').value || '').trim();
+    const amount = parseFloat(document.getElementById('amount').value) || 1;
+    const category = document.getElementById('category').value;
+    const dueDate = document.getElementById('dueDate').value;
+
+    if (!bettor) { showToast('Who is betting?', true); return; }
+    if (!opponent) { showToast('Who are they betting against?', true); return; }
+    if (!description) { showToast('What is the bet?', true); return; }
+
+    push(ref(db, 'bets'), {
+      type: 'bet', bettor, opponent, description, amount, category, dueDate,
+      status: 'open', createdAt: new Date().toISOString()
+    });
+
+    showToast('🍺 Bet locked in!');
+    document.getElementById('description').value = '';
+    document.getElementById('amount').value = '1';
+    document.getElementById('dueDate').value = '';
+  }
+
+  // --- Add Punishment ---
+  function addPunishment() {
+    const name = (document.getElementById('pName').value || '').trim();
+    const issuer = (document.getElementById('pIssuer').value || '').trim();
+    const reasonSel = document.getElementById('pReason').value;
+    const customReason = (document.getElementById('pCustomReason').value || '').trim();
+    const amount = parseFloat(document.getElementById('pAmount').value) || 1;
+    const reason = reasonSel === 'custom' ? customReason : reasonSel;
+
+    if (!name) { showToast('Who copped the punishment?', true); return; }
+    if (!issuer) { showToast('Who issued it?', true); return; }
+    if (reasonSel === 'custom' && !customReason) { showToast('Add a custom reason!', true); return; }
+
+    push(ref(db, 'punishments'), {
+      type: 'punishment', name, issuer, reason, amount,
+      createdAt: new Date().toISOString()
+    });
+
+    showToast('⚡ ' + name + ' owes ' + amount + ' 🍺');
+    document.getElementById('pName').value = '';
+    document.getElementById('pIssuer').value = '';
+    document.getElementById('pAmount').value = '1';
+    document.getElementById('pCustomReason').value = '';
+    document.getElementById('pReason').selectedIndex = 0;
+    document.getElementById('customRow').classList.remove('visible');
+  }
+
+  // --- Mark bet ---
+  function markBet(id, status) {
+    const updates = { status };
+    if (status !== 'open') updates.resolvedAt = new Date().toISOString();
+    else updates.resolvedAt = null;
+    update(ref(db, 'bets/' + id), updates);
+    const b = bets[id];
+    if (b) {
+      if (status === 'won') showToast('🏆 ' + b.bettor + ' wins ' + b.amount + ' 🍺!');
+      else if (status === 'lost') showToast('😬 ' + b.bettor + ' owes ' + b.amount + ' 🍺');
+      else showToast('Bet reopened');
+    }
+  }
+
+  // --- Leaderboard ---
+  function buildLeaderboard() {
+    const players = {};
+    const ensure = n => { if (!players[n]) players[n] = { name: n, beers: 0, wins: 0, losses: 0, open: 0, punishments: 0 }; };
+
+    Object.values(bets).forEach(b => {
+      ensure(b.bettor); ensure(b.opponent);
+      if (b.status === 'won') {
+        players[b.bettor].beers += b.amount; players[b.bettor].wins++;
+        players[b.opponent].beers -= b.amount; players[b.opponent].losses++;
+      } else if (b.status === 'lost') {
+        players[b.bettor].beers -= b.amount; players[b.bettor].losses++;
+        players[b.opponent].beers += b.amount; players[b.opponent].wins++;
+      } else {
+        players[b.bettor].open++; players[b.opponent].open++;
+      }
+    });
+
+    Object.values(punishments).forEach(p => {
+      ensure(p.name);
+      players[p.name].beers -= p.amount;
+      players[p.name].punishments++;
+    });
+
+    return Object.values(players).sort((a, b) => b.beers - a.beers);
+  }
+
+  // --- Render ---
+  function render() { renderLeaderboard(); renderStats(); renderList(); }
+
+  function renderLeaderboard() {
+    const lb = buildLeaderboard();
+    const el = document.getElementById('leaderboard');
+    if (!lb.length) { el.innerHTML = '<div class="empty-state">No players yet — log the first bet!</div>'; return; }
+    const medals = ['🥇','🥈','🥉'];
+    el.innerHTML = lb.map((p, i) =>
+      '<div class="player-row">' +
+        '<span class="player-rank">' + (medals[i] || (i+1) + '.') + '</span>' +
+        '<span class="player-name">' + esc(p.name) + '</span>' +
+        '<span class="player-record">' +
+          p.wins + 'W ' + p.losses + 'L' + (p.open > 0 ? ' · ' + p.open + ' open' : '') +
+          (p.punishments > 0 ? '<br><span style="color:var(--punish-light)">⚡ ' + p.punishments + ' fine' + (p.punishments > 1 ? 's' : '') + '</span>' : '') +
+        '</span>' +
+        '<span class="player-balance ' + (p.beers > 0 ? 'pos' : p.beers < 0 ? 'neg' : 'zero') + '">' +
+          (p.beers > 0 ? '+' : '') + p.beers.toFixed(1) + ' 🍺' +
+        '</span>' +
+      '</div>'
+    ).join('');
+  }
+
+  function renderStats() {
+    const bArr = Object.values(bets);
+    const pArr = Object.values(punishments);
+    const open = bArr.filter(b => b.status === 'open').length;
+    const won = bArr.filter(b => b.status === 'won').length;
+    const lost = bArr.filter(b => b.status === 'lost').length;
+    const pBeers = pArr.reduce((s, p) => s + p.amount, 0);
+    document.getElementById('statsBar').innerHTML =
+      '<div class="stat-pill"><strong>' + bArr.length + '</strong>Bets</div>' +
+      '<div class="stat-pill"><strong style="color:var(--amber)">' + open + '</strong>Open</div>' +
+      '<div class="stat-pill"><strong style="color:#5cb85c">' + won + '</strong>Won</div>' +
+      '<div class="stat-pill"><strong style="color:#e05252">' + lost + '</strong>Lost</div>' +
+      '<div class="stat-pill punish-count"><strong>' + pArr.length + '</strong>Punishments</div>' +
+      '<div class="stat-pill punish-count"><strong>' + pBeers.toFixed(1) + ' 🍺</strong>In fines</div>';
+  }
+
+  function renderList() {
+    const el = document.getElementById('betsList');
+    const bArr = Object.entries(bets).map(([id, b]) => ({...b, id}));
+    const pArr = Object.entries(punishments).map(([id, p]) => ({...p, id}));
+
+    let items = [];
+    if (currentFilter === 'punishment') {
+      items = pArr;
+    } else {
+      const filtered = currentFilter === 'all' ? bArr : bArr.filter(b => b.status === currentFilter);
+      items = [...filtered, ...(currentFilter === 'all' ? pArr : [])];
+    }
+
+    items.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+
+    if (!items.length) { el.innerHTML = '<div class="empty-state">Nothing here yet.</div>'; return; }
+    el.innerHTML = items.map(item => item.type === 'punishment' ? renderPunishCard(item) : renderBetCard(item)).join('');
+  }
+
+  function renderBetCard(b) {
+    const date = b.dueDate ? 'Due: ' + b.dueDate : fmtDate(b.createdAt);
+    const catEmoji = {footy:'🏉', general:'🎲', sport:'⚽', misc:'🤷'}[b.category] || '🎲';
+    return '<div class="bet-card ' + b.status + '">' +
+      '<div>' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">' +
+          '<span class="bet-bettor">' + esc(b.bettor) + '</span>' +
+          '<span style="color:var(--border);font-size:0.75rem">vs</span>' +
+          '<span class="bet-bettor" style="color:var(--border)">' + esc(b.opponent) + '</span>' +
+        '</div>' +
+        '<div class="bet-desc">' + esc(b.description) + '</div>' +
+        '<div class="bet-meta">' +
+          '<span class="tag tag-' + b.status + '">' + b.status.toUpperCase() + '</span>' +
+          '<span class="bet-amount">' + b.amount + ' 🍺</span>' +
+          '<span class="bet-amount">' + catEmoji + ' ' + b.category + '</span>' +
+          '<span class="bet-date">' + date + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="bet-actions">' +
+        (b.status === 'open'
+          ? '<button class="action-btn btn-won" data-action="won" data-id="' + b.id + '">✓ Won</button>' +
+            '<button class="action-btn btn-lost" data-action="lost" data-id="' + b.id + '">✗ Lost</button>'
+          : '<button class="action-btn btn-reopen" data-action="reopen" data-id="' + b.id + '">↩ Reopen</button>') +
+        '<button class="action-btn btn-delete" data-action="deleteBet" data-id="' + b.id + '">🗑</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderPunishCard(p) {
+    return '<div class="punish-card">' +
+      '<div>' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">' +
+          '<span class="bet-bettor punish-bettor">⚡ ' + esc(p.name) + '</span>' +
+          '<span style="color:var(--border);font-size:0.75rem">issued by</span>' +
+          '<span style="color:var(--border);font-size:0.85rem;font-family:\'Playfair Display\',serif">' + esc(p.issuer) + '</span>' +
+        '</div>' +
+        '<div class="bet-desc">' + esc(p.reason) + '</div>' +
+        '<div class="bet-meta">' +
+          '<span class="tag tag-punish">PUNISHMENT</span>' +
+          '<span class="bet-amount">' + p.amount + ' 🍺</span>' +
+          '<span class="bet-date">' + fmtDate(p.createdAt) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="bet-actions">' +
+        '<button class="action-btn btn-delete" data-action="deletePunishment" data-id="' + p.id + '">🗑</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    try { return new Date(iso).toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' }); }
+    catch(e) { return iso; }
+  }
+
+  let toastTimer;
+  function showToast(msg, isError) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
