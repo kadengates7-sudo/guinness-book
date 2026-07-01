@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guinness Book of Buoy Records</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --cream: #f5f0e8; --stout: #1c0f05; --gold: #c8991a; --amber: #e8b84b;
+    --border: #c4a96a; --punish: #7c3aed; --punish-light: #a78bfa;
+    --green: #5cb85c; --red: #e05252; --pink: #f472b6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--stout); color: var(--cream); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(200,153,26,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(200,153,26,0.05) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; position: relative; z-index: 1; }
+
+  .sync-status { text-align: center; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; color: var(--border); opacity: 0.7; }
+  .sync-status.connected { color: var(--green); opacity: 1; }
+  .sync-status.error { color: var(--red); opacity: 1; }
+
+  header { text-align: center; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 2px solid var(--gold); position: relative; }
+  header::after { content: '🍺'; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 28px; background: var(--stout); padding: 0 12px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 5vw, 2.8rem); font-weight: 900; color: var(--amber); letter-spacing: -1px; line-height: 1.1; }
+  .subtitle { color: var(--border); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; }
+
+  /* TAB COUNTER */
+  .the-tab {
+    background: linear-gradient(135deg, rgba(200,153,26,0.15), rgba(200,153,26,0.04));
+    border: 2px solid var(--gold); border-radius: 14px; padding: 18px 20px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .tab-number { font-family: 'Playfair Display', serif; font-size: 3.2rem; font-weight: 900; color: var(--amber); line-height: 1; min-width: 80px; text-align: center; }
+  .tab-label { flex: 1; }
+  .tab-label strong { display: block; font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; color: var(--border); }
+  .tab-label span { font-size: 0.78rem; color: rgba(196,169,106,0.6); margin-top: 4px; display: block; }
+  .spin-btn { background: var(--punish); color: #fff; border: none; border-radius: 8px; font-family: 'Playfair Display', serif; font-size: 0.8rem; font-weight: 700; padding: 9px 13px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; text-align: center; white-space: nowrap; }
+  .spin-btn:active { background: var(--punish-light); color: var(--stout); }
+
+  /* SESSION BANNER */
+  .session-banner {
+    background: rgba(92,184,92,0.12); border: 2px solid var(--green);
+    border-radius: 12px; padding: 14px 18px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .session-banner-text { flex: 1; font-size: 0.82rem; color: var(--green); }
+  .session-banner-text strong { display: block; font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 2px; }
+  .close-session-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; font-family: 'Playfair Display', serif; font-size: 0.82rem; font-weight: 700; padding: 10px 14px; cursor: pointer; touch-action: manipulation; white-space: nowrap; }
+  .close-session-btn:active { opacity: 0.8; }
+
+  /* NAV */
+  .nav-tabs { display: flex; border-bottom: 2px solid rgba(200,153,26,0.2); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 10px 12px; border: none; background: transparent; color: var(--border); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .nav-tab.active { color: var(--amber); border-bottom-color: var(--gold); font-weight: 700; }
+  .nav-tab.t-punish.active { color: var(--punish-light); border-bottom-color: var(--punish-light); }
+  .nav-tab.t-pub.active { color: var(--green); border-bottom-color: var(--green); }
+  .nav-tab.t-stats.active { color: var(--pink); border-bottom-color: var(--pink); }
+  .nav-tab.t-log.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+  .nav-panel { display: none; }
+  .nav-panel.active { display: block; }
+  .panel-wrap { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.3); border-top: none; border-radius: 0 0 12px 12px; padding: 20px; margin-bottom: 24px; }
+
+  /* SECTION */
+  .section-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--amber); margin-bottom: 16px; letter-spacing: 1px; }
+
+  /* LEDGER */
+  .player-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(200,153,26,0.12); margin-bottom: 8px; }
+  .player-rank { font-size: 1.1rem; width: 28px; text-align: center; }
+  .player-name { flex: 1; font-size: 0.88rem; color: var(--cream); font-weight: 500; }
+  .player-record { font-size: 0.67rem; color: var(--border); text-align: right; line-height: 1.8; }
+  .player-balance { font-weight: 700; font-size: 0.95rem; min-width: 68px; text-align: right; }
+  .pos { color: var(--green); } .neg { color: var(--red); } .zero { color: var(--border); }
+
+  /* FORMS */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-full { margin-bottom: 12px; }
+  label { display: block; font-size: 0.66rem; color: var(--border); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+  input, select { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(200,153,26,0.35); border-radius: 7px; color: var(--cream); font-family: 'DM Mono', monospace; font-size: 16px; padding: 10px 12px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; appearance: none; }
+  input:focus, select:focus { border-color: var(--gold); }
+  select option { background: #2a1a08; }
+  .add-btn { width: 100%; border: none; border-radius: 8px; font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; padding: 14px; cursor: pointer; letter-spacing: 1px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 50px; }
+  .btn-gold { background: var(--gold); color: var(--stout); }
+  .btn-gold:active { background: var(--amber); }
+  .btn-purple { background: var(--punish); color: #fff; }
+  .btn-purple:active { background: var(--punish-light); }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:active { opacity: 0.85; }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:active { opacity: 0.85; }
+  .custom-row { display: none; margin-bottom: 12px; }
+  .custom-row.visible { display: block; }
+
+  /* STATS */
+  .stats-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .stat-pill { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.2); border-radius: 8px; padding: 8px 12px; font-size: 0.7rem; color: var(--border); }
+  .stat-pill strong { display: block; font-size: 1rem; color: var(--amber); font-family: 'Playfair Display', serif; }
+
+  /* FILTERS */
+  .bets-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-btn { background: transparent; border: 1px solid rgba(200,153,26,0.3); color: var(--border); font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 12px; border-radius: 20px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .filter-btn.active { background: var(--gold); color: var(--stout); border-color: var(--gold); font-weight: 700; }
+
+  /* BET CARDS */
+  .bet-card { border: 1px solid rgba(200,153,26,0.15); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; background: rgba(0,0,0,0.2); }
+  .bet-card.open { border-left: 3px solid var(--amber); }
+  .bet-card.pending { border-left: 3px solid #60a5fa; }
+  .bet-card.declined { border-left: 3px solid var(--border); opacity: 0.55; }
+  .bet-card.won { border-left: 3px solid var(--green); }
+  .bet-card.lost { border-left: 3px solid var(--red); }
+  .bet-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .bet-bettor { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--amber); font-weight: 700; }
+  .bet-vs { color: var(--border); font-size: 0.75rem; }
+  .bet-opponent { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--border); font-weight: 700; }
+  .bet-desc { font-size: 0.86rem; color: var(--cream); line-height: 1.4; margin-bottom: 8px; }
+  .bet-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; }
+  .tag { font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: 500; }
+  .tag-open { background: rgba(200,153,26,0.2); color: var(--amber); }
+  .tag-pending { background: rgba(96,165,250,0.2); color: #60a5fa; }
+  .tag-declined { background: rgba(196,169,106,0.1); color: var(--border); }
+  .tag-won { background: rgba(92,184,92,0.2); color: var(--green); }
+  .tag-lost { background: rgba(224,82,82,0.2); color: var(--red); }
+  .tag-punish { background: rgba(124,58,237,0.25); color: var(--punish-light); }
+  .bet-amount { font-size: 0.78rem; color: var(--border); }
+  .bet-witnesses { font-size: 0.68rem; color: rgba(196,169,106,0.5); }
+  .bet-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .action-btn { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 1px; padding: 7px 11px; border-radius: 5px; border: 1px solid; cursor: pointer; text-transform: uppercase; white-space: nowrap; background: transparent; touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 32px; }
+  .btn-won { border-color: var(--green); color: var(--green); }
+  .btn-won:active { background: rgba(92,184,92,0.2); }
+  .btn-lost { border-color: var(--red); color: var(--red); }
+  .btn-lost:active { background: rgba(224,82,82,0.2); }
+  .btn-accept { border-color: var(--green); color: var(--green); }
+  .btn-decline { border-color: var(--border); color: var(--border); }
+  .btn-reopen { border-color: var(--gold); color: var(--gold); }
+  .btn-reopen:active { background: rgba(200,153,26,0.2); }
+  .btn-delete { border-color: rgba(196,169,106,0.25); color: rgba(196,169,106,0.4); }
+  .btn-delete:active { border-color: var(--red); color: var(--red); }
+
+  /* PUNISH CARD */
+  .punish-card { border: 1px solid rgba(124,58,237,0.25); border-left: 3px solid var(--punish-light); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; background: rgba(124,58,237,0.05); }
+  .punish-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .punish-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--punish-light); font-weight: 700; }
+  .punish-desc { font-size: 0.86rem; color: var(--cream); line-height: 1.4; margin-bottom: 8px; }
+
+  /* PUB SESSION */
+  .buoy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .buoy-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.2); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 8px; }
+  .buoy-name { flex: 1; font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--cream); font-weight: 700; }
+  .buoy-owed { font-size: 0.65rem; color: var(--red); display: block; font-family: 'DM Mono', monospace; }
+  .buoy-count { font-size: 1.2rem; font-weight: 700; min-width: 26px; text-align: center; color: var(--amber); font-family: 'Playfair Display', serif; }
+  .buoy-stepper { display: flex; flex-direction: column; gap: 3px; }
+  .step-btn { background: rgba(200,153,26,0.15); border: 1px solid rgba(200,153,26,0.3); color: var(--amber); border-radius: 5px; width: 28px; height: 24px; font-size: 1rem; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; font-weight: 700; line-height: 1; }
+  .step-btn:active { background: rgba(200,153,26,0.35); }
+
+  /* BALANCE ROWS */
+  .balance-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; border: 1px solid; margin-bottom: 8px; }
+  .balance-row.credit { background: rgba(92,184,92,0.07); border-color: rgba(92,184,92,0.2); border-left: 3px solid var(--green); }
+  .balance-row.debit { background: rgba(224,82,82,0.07); border-color: rgba(224,82,82,0.2); border-left: 3px solid var(--red); }
+  .balance-row.square { background: rgba(255,255,255,0.03); border-color: rgba(200,153,26,0.12); border-left: 3px solid var(--border); }
+  .balance-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; flex: 1; }
+  .balance-detail { font-size: 0.68rem; color: var(--border); }
+  .balance-net { font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
+
+  /* STATS / HOF */
+  .hof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hof-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(200,153,26,0.2); border-radius: 10px; padding: 14px 12px; text-align: center; }
+  .hof-emoji { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+  .hof-title { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--border); margin-bottom: 4px; }
+  .hof-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--amber); font-weight: 700; }
+  .hof-stat { font-size: 0.7rem; color: var(--border); margin-top: 2px; }
+
+  /* BEER LOG */
+  .beer-log-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(92,184,92,0.06); border: 1px solid rgba(92,184,92,0.18); border-radius: 8px; margin-bottom: 8px; }
+  .beer-log-text { flex: 1; font-size: 0.8rem; color: var(--cream); }
+  .beer-log-date { font-size: 0.63rem; color: rgba(196,169,106,0.5); white-space: nowrap; }
+
+  /* PLAYER PROFILE MODAL */
+  .profile-modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75); z-index: 250;
+    align-items: flex-end; justify-content: center;
+  }
+  .profile-modal.open { display: flex; }
+  .profile-inner {
+    background: #221208; border: 1px solid rgba(200,153,26,0.3);
+    border-radius: 20px 20px 0 0; padding: 24px 20px 40px;
+    width: 100%; max-width: 600px; max-height: 85vh;
+    overflow-y: auto; animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  .profile-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .profile-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: var(--amber); }
+  .profile-balance { font-size: 1rem; font-weight: 700; margin-top: 2px; }
+  .profile-close { background: rgba(255,255,255,0.08); border: none; color: var(--border); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; touch-action: manipulation; flex-shrink: 0; }
+
+  .profile-stats-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .profile-stat { background: rgba(255,255,255,0.05); border: 1px solid rgba(200,153,26,0.2); border-radius: 8px; padding: 8px 12px; text-align: center; flex: 1; min-width: 60px; }
+  .profile-stat strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--amber); }
+  .profile-stat span { font-size: 0.62rem; color: var(--border); letter-spacing: 1px; text-transform: uppercase; }
+
+  .profile-section-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--amber); margin: 16px 0 10px; letter-spacing: 1px; border-bottom: 1px solid rgba(200,153,26,0.2); padding-bottom: 6px; }
+
+  .profile-bet-row { padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(200,153,26,0.1); margin-bottom: 6px; }
+  .profile-bet-desc { font-size: 0.82rem; color: var(--cream); margin-bottom: 4px; }
+  .profile-bet-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  .profile-punish-row { padding: 10px 12px; background: rgba(124,58,237,0.06); border-radius: 8px; border: 1px solid rgba(124,58,237,0.2); margin-bottom: 6px; }
+  .profile-punish-desc { font-size: 0.82rem; color: var(--cream); margin-bottom: 4px; }
+
+  .profile-log-row { padding: 8px 12px; background: rgba(92,184,92,0.06); border: 1px solid rgba(92,184,92,0.15); border-radius: 8px; margin-bottom: 6px; font-size: 0.78rem; color: var(--cream); }
+
+  /* SPIN WHEEL */
+  .spin-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 300; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; overflow-y: auto; }
+  .spin-modal.open { display: flex; }
+  .spin-inner { width: 100%; max-width: 420px; margin: auto; text-align: center; }
+  .spin-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--amber); margin-bottom: 6px; }
+  .spin-sub { font-size: 0.75rem; color: var(--border); margin-bottom: 20px; }
+  .players-input { display: flex; gap: 8px; margin-bottom: 12px; }
+  .players-input input { flex: 1; }
+  .add-player-btn { background: var(--gold); color: var(--stout); border: none; border-radius: 7px; font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 700; padding: 0 16px; cursor: pointer; touch-action: manipulation; white-space: nowrap; }
+  .player-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; min-height: 36px; }
+  .player-chip { background: rgba(200,153,26,0.2); border: 1px solid rgba(200,153,26,0.4); border-radius: 20px; padding: 6px 12px; font-size: 0.78rem; color: var(--amber); display: flex; align-items: center; gap: 6px; }
+  .chip-remove { cursor: pointer; color: var(--border); font-size: 0.9rem; line-height: 1; }
+  .wheel-wrap { position: relative; width: 280px; height: 280px; margin: 0 auto 20px; }
+  canvas#wheelCanvas { border-radius: 50%; display: block; }
+  .wheel-pointer { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); z-index: 10; }
+  .spin-go-btn { background: var(--punish); color: #fff; border: none; border-radius: 10px; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900; padding: 16px 40px; cursor: pointer; letter-spacing: 1px; margin-bottom: 16px; touch-action: manipulation; }
+  .spin-go-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .spin-result { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--amber); min-height: 40px; margin-bottom: 16px; font-weight: 700; }
+  .spin-close { background: transparent; border: 1px solid rgba(200,153,26,0.3); color: var(--border); border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 12px 24px; cursor: pointer; }
+
+  /* PARTIAL MODAL */
+  .partial-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+  .partial-modal.open { display: flex; }
+  .partial-inner { background: #2a1a08; border: 2px solid var(--amber); border-radius: 16px; padding: 24px; width: 100%; max-width: 360px; }
+  .partial-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--amber); margin-bottom: 16px; }
+
+  /* CLOSE SESSION MODAL */
+  .session-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
+  .session-modal.open { display: flex; }
+  .session-inner { background: #2a1a08; border: 2px solid var(--green); border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; margin: auto; }
+  .session-inner-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green); margin-bottom: 6px; }
+  .session-inner-sub { font-size: 0.75rem; color: var(--border); margin-bottom: 20px; }
+  .summary-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(200,153,26,0.15); margin-bottom: 8px; gap: 10px; }
+  .summary-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--cream); }
+  .summary-detail { font-size: 0.72rem; color: var(--border); flex: 1; padding-left: 8px; }
+  .summary-result { font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
+
+  .empty-state { text-align: center; color: var(--border); font-size: 0.8rem; padding: 28px 16px; opacity: 0.6; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--gold); color: var(--stout); font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 700; padding: 12px 24px; border-radius: 8px; transition: transform 0.3s ease; z-index: 400; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.error { background: var(--red); color: #fff; }
+
+  @media (max-width: 480px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .hof-grid { grid-template-columns: 1fr 1fr; }
+    .buoy-grid { grid-template-columns: 1fr 1fr; }
+    .the-tab { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Guinness Book of Buoy Records</h1>
+    <p class="subtitle">Settle your debts, gentlemen</p>
+  </header>
+
+  <div class="sync-status" id="syncStatus">⏳ connecting...</div>
+
+  <!-- THE TAB -->
+  <div class="the-tab">
+    <div class="tab-number" id="tabNumber">0</div>
+    <div class="tab-label">
+      <strong>🍺 The Tab</strong>
+      <span id="tabBreakdown">Total beers outstanding</span>
+    </div>
+    <button class="spin-btn" data-action="openSpin">🎰 Who's Round?</button>
+  </div>
+
+  <!-- SESSION BANNER (shown when session is active) -->
+  <div class="session-banner" id="sessionBanner" style="display:none">
+    <div style="font-size:1.4rem">🍻</div>
+    <div class="session-banner-text">
+      <strong>Pub Session Active</strong>
+      <span id="sessionBannerDetail">Log beers as they're consumed</span>
+    </div>
+    <button class="close-session-btn" data-action="openCloseSession">Close Session</button>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="section-box">
+    <div class="section-title">⚖️ The Ledger</div>
+    <div id="leaderboard"><div class="empty-state">No players yet</div></div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-tabs">
+    <button class="nav-tab t-punish active" data-action="nav" data-nav="punishments">⚡ Punishments</button>
+    <button class="nav-tab" data-action="nav" data-nav="bets">🍺 Bets</button>
+    <button class="nav-tab t-pub" data-action="nav" data-nav="pub">🍻 Pub Session</button>
+    <button class="nav-tab t-stats" data-action="nav" data-nav="stats">📊 Stats</button>
+    <button class="nav-tab t-log" data-action="nav" data-nav="log">📖 Beer Log</button>
+  </div>
+
+  <div class="panel-wrap">
+
+    <!-- PUNISHMENTS -->
+    <div class="nav-panel active" id="nav-punishments">
+      <div class="section-title" style="margin-bottom:14px">⚡ Issue a Punishment</div>
+      <div class="form-grid">
+        <div><label>Who copped it</label><input type="text" id="pName" placeholder="Their name" autocomplete="off" autocapitalize="words"></div>
+        <div><label>Issued by</label><input type="text" id="pIssuer" placeholder="Your name" autocomplete="off" autocapitalize="words"></div>
+      </div>
+      <div class="form-grid">
+        <div>
+          <label>Reason</label>
+          <input type="text" id="pReason" placeholder="Describe the crime..." autocomplete="off">
+        </div>
+        <div><label>Beers 🍺</label><input type="number" id="pAmount" min="1" step="1" value="1" inputmode="numeric"></div>
+      </div>
+      <button class="add-btn btn-purple" data-action="addPunishment">⚡ Hand It Down</button>
+      <div style="margin-top:24px">
+        <div class="section-title" style="margin-bottom:12px">📋 All Punishments</div>
+        <div id="punishList"><div class="empty-state">No punishments yet.</div></div>
+      </div>
+    </div>
+
+    <!-- BETS -->
+    <div class="nav-panel" id="nav-bets">
+      <div class="section-title" style="margin-bottom:14px">➕ Propose a Bet</div>
+      <div class="form-grid">
+        <div><label>Proposer</label><input type="text" id="bettor" placeholder="Your name" autocomplete="off" autocapitalize="words"></div>
+        <div><label>Against</label><input type="text" id="opponent" placeholder="Their name" autocomplete="off" autocapitalize="words"></div>
+      </div>
+      <div class="form-full"><label>The bet</label><input type="text" id="description" placeholder="e.g. Eagles win the flag 2026" autocomplete="off"></div>
+      <div class="form-grid">
+        <div><label>Beers 🍺</label><input type="number" id="amount" min="1" step="1" value="1" inputmode="numeric"></div>
+        <div>
+          <label>Category</label>
+          <select id="category">
+            <option value="footy">🏉 Footy</option>
+            <option value="general">🎲 General</option>
+            <option value="sport">⚽ Other Sport</option>
+            <option value="misc">🤷 Misc</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid" style="margin-bottom:16px">
+        <div><label>Witness 1</label><input type="text" id="witness1" placeholder="Name (optional)" autocomplete="off" autocapitalize="words"></div>
+        <div><label>Witness 2</label><input type="text" id="witness2" placeholder="Name (optional)" autocomplete="off" autocapitalize="words"></div>
+      </div>
+      <button class="add-btn btn-gold" data-action="addBet">🍺 Propose Bet</button>
+      <div style="margin-top:24px">
+        <div class="section-title" style="margin-bottom:12px">📋 All Bets</div>
+        <div class="stats-bar" id="statsBar"></div>
+        <div class="bets-controls">
+          <button class="filter-btn active" data-action="filter" data-filter="all">All</button>
+          <button class="filter-btn" data-action="filter" data-filter="pending">Pending</button>
+          <button class="filter-btn" data-action="filter" data-filter="open">Active</button>
+          <button class="filter-btn" data-action="filter" data-filter="won">Won</button>
+          <button class="filter-btn" data-action="filter" data-filter="lost">Lost</button>
+          <button class="filter-btn" data-action="filter" data-filter="declined">Declined</button>
+        </div>
+        <div id="betsList"><div class="empty-state">No bets yet.</div></div>
+      </div>
+    </div>
+
+    <!-- PUB SESSION -->
+    <div class="nav-panel" id="nav-pub">
+      <div id="pubSessionContent">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="nav-panel" id="nav-stats">
+      <div class="section-title" style="margin-bottom:14px">📊 Stats</div>
+      <div class="hof-grid" id="hofGrid"><div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div></div>
+    </div>
+
+    <!-- BEER LOG -->
+    <div class="nav-panel" id="nav-log">
+      <div class="section-title" style="margin-bottom:14px">📖 Beer Log</div>
+      <div id="beerLog"><div class="empty-state">No beers logged yet.</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CLOSE SESSION MODAL -->
+<div class="session-modal" id="closeSessionModal">
+  <div class="session-inner">
+    <div class="session-inner-title">🍻 Close Session</div>
+    <div class="session-inner-sub">Here's what happened tonight. Beers drunk auto-pay off oldest debts first — surplus goes to credit.</div>
+    <div id="sessionSummary"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="add-btn btn-green" style="flex:1" data-action="confirmCloseSession">✓ Confirm & Close</button>
+      <button class="add-btn" style="flex:1;background:transparent;border:1px solid rgba(200,153,26,0.3);color:var(--border)" data-action="cancelCloseSession">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPIN WHEEL -->
+<div class="spin-modal" id="spinModal">
+  <div class="spin-inner">
+    <div class="spin-title">🎰 Who's Round?</div>
+    <div class="spin-sub">Add who's at the pub tonight, then spin</div>
+    <div class="players-input">
+      <input type="text" id="spinPlayerInput" placeholder="Add a name..." autocapitalize="words" autocomplete="off">
+      <button class="add-player-btn" data-action="addSpinPlayer">+ Add</button>
+    </div>
+    <div class="player-chips" id="playerChips"></div>
+    <div class="wheel-wrap">
+      <div class="wheel-pointer">▼</div>
+      <canvas id="wheelCanvas" width="280" height="280"></canvas>
+    </div>
+    <div class="spin-result" id="spinResult"></div>
+    <button class="spin-go-btn" id="spinGoBtn" data-action="spinWheel">🍺 SPIN</button><br>
+    <button class="spin-close" data-action="closeSpin">Close</button>
+  </div>
+</div>
+
+<!-- PLAYER PROFILE MODAL -->
+<div class="profile-modal" id="profileModal">
+  <div class="profile-inner">
+    <div class="profile-header">
+      <div>
+        <div class="profile-name" id="profileName"></div>
+        <div class="profile-balance" id="profileBalance"></div>
+      </div>
+      <button class="profile-close" data-action="closeProfile">✕</button>
+    </div>
+    <div class="profile-stats-row" id="profileStatsRow"></div>
+    <div class="profile-sections" id="profileSections"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getDatabase, ref, push, update, remove, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDQozR-X5fbWUuQ12JoN_a3jf-F1L9Lj30",
+    authDomain: "guinness-book-e59c1.firebaseapp.com",
+    databaseURL: "https://guinness-book-e59c1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "guinness-book-e59c1",
+    storageBucket: "guinness-book-e59c1.firebasestorage.app",
+    messagingSenderId: "608475080713",
+    appId: "1:608475080713:web:46d638fd63134b2c25b0d8"
+  };
+
+  const BUOYS = ['Callum','Jacko','Tyler','Liam','Kaden','Ben','Mason','Owain'];
+  const WHEEL_COLORS = ['#c8991a','#7c3aed','#e05252','#5cb85c','#60a5fa','#f472b6','#e8b84b','#a78bfa'];
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let bets = {}, punishments = {}, beerLog = {}, activeSession = null, credits = {};
+  let currentFilter = 'all';
+  let spinPlayers = [], isSpinning = false;
+  // Local session drink counts (not saved until session closes)
+  const sessionCounts = {};
+  BUOYS.forEach(n => sessionCounts[n] = 0);
+
+  // --- Firebase listeners ---
+  const syncEl = document.getElementById('syncStatus');
+  onValue(ref(db, 'bets'), snap => { bets = snap.val() || {}; render(); syncEl.textContent = '🟢 live sync active'; syncEl.className = 'sync-status connected'; }, () => { syncEl.textContent = '🔴 connection error'; syncEl.className = 'sync-status error'; });
+  onValue(ref(db, 'punishments'), snap => { punishments = snap.val() || {}; render(); });
+  onValue(ref(db, 'beerLog'), snap => { beerLog = snap.val() || {}; renderBeerLog(); });
+  onValue(ref(db, 'credits'), snap => { credits = snap.val() || {}; render(); });
+  onValue(ref(db, 'activeSession'), snap => { activeSession = snap.val(); renderPubSession(); renderSessionBanner(); });
+  onValue(ref(db, 'sessionCounts'), snap => {
+    const saved = snap.val() || {};
+    BUOYS.forEach(n => sessionCounts[n] = saved[n] || 0);
+    renderSessionBanner();
+    renderBuoyGrid();
+  });
+
+  // --- Event delegation ---
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    // Only preventDefault for anchors, not buttons (breaks iOS tap)
+    if (el.tagName === 'A') e.preventDefault();
+    const a = el.dataset.action, id = el.dataset.id;
+
+    if (a === 'nav') {
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.nav-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('nav-' + el.dataset.nav).classList.add('active');
+    }
+    else if (a === 'filter') { currentFilter = el.dataset.filter; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); renderBets(); }
+    else if (a === 'addPunishment') addPunishment();
+    else if (a === 'addBet') addBet();
+    else if (a === 'acceptBet') acceptBet(id);
+    else if (a === 'declineBet') declineBet(id);
+    else if (a === 'won') markBet(id, 'won');
+    else if (a === 'lost') markBet(id, 'lost');
+    else if (a === 'reopen') markBet(id, 'open');
+    else if (a === 'deleteBet') { if (confirm('Delete this bet?')) { remove(ref(db, 'bets/' + id)); showToast('Deleted'); } }
+    else if (a === 'deletePunish') { if (confirm('Delete this punishment?')) { remove(ref(db, 'punishments/' + id)); showToast('Deleted'); } }
+    else if (a === 'openProfile') openProfile(el.dataset.name);
+    else if (a === 'closeProfile') document.getElementById('profileModal').classList.remove('open');
+    else if (a === 'stepDrink') {
+      const name = el.dataset.name, dir = parseInt(el.dataset.dir);
+      sessionCounts[name] = Math.max(0, sessionCounts[name] + dir);
+      update(ref(db, 'sessionCounts'), { [name]: sessionCounts[name] });
+      const dc = document.getElementById('dc-' + name);
+      if (dc) dc.textContent = sessionCounts[name];
+      renderSessionBanner();
+    }
+    else if (a === 'startSession') startSession();
+    else if (a === 'openCloseSession') openCloseSession();
+    else if (a === 'confirmCloseSession') confirmCloseSession();
+    else if (a === 'cancelCloseSession') document.getElementById('closeSessionModal').classList.remove('open');
+    else if (a === 'undoLog') undoLog(id);
+    else if (a === 'openSpin') openSpin();
+    else if (a === 'closeSpin') document.getElementById('spinModal').classList.remove('open');
+    else if (a === 'addSpinPlayer') addSpinPlayer();
+    else if (a === 'removeSpinPlayer') { spinPlayers = spinPlayers.filter((_, i) => i !== parseInt(el.dataset.idx)); renderChips(); drawWheel(); }
+    else if (a === 'spinWheel') doSpin();
+  });
+
+
+
+  document.getElementById('profileModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('profileModal')) document.getElementById('profileModal').classList.remove('open');
+  });
+  document.getElementById('spinPlayerInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addSpinPlayer(); } });
+
+  // --- Pub Session ---
+  function startSession() {
+    if (activeSession && activeSession.active) { showToast('Session already active!', true); return; }
+    BUOYS.forEach(n => sessionCounts[n] = 0);
+    const clearCounts = {};
+    BUOYS.forEach(n => clearCounts[n] = 0);
+    update(ref(db, 'sessionCounts'), clearCounts);
+    update(ref(db, 'activeSession'), { startedAt: new Date().toISOString(), active: true });
+    showToast('🍻 Pub session started!');
+  }
+  window._startSession = startSession;
+
+  function renderSessionBanner() {
+    const banner = document.getElementById('sessionBanner');
+    if (activeSession && activeSession.active) {
+      banner.style.display = 'flex';
+      const total = BUOYS.reduce((s, n) => s + (sessionCounts[n] || 0), 0);
+      const perPerson = BUOYS.filter(n => sessionCounts[n] > 0).map(n => n + ' ' + sessionCounts[n] + '🍺').join(' · ');
+      document.getElementById('sessionBannerDetail').innerHTML =
+        '<strong style="color:var(--amber)">' + total + ' beers</strong> logged tonight' +
+        (perPerson ? '<br><span style="font-size:0.7rem;opacity:0.8">' + perPerson + '</span>' : '');
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  function renderPubSession() {
+    const el = document.getElementById('pubSessionContent');
+    if (!activeSession || !activeSession.active) {
+      // No active session
+      el.innerHTML =
+        '<div class="section-title" style="margin-bottom:8px">🍻 Pub Session</div>' +
+        '<p style="font-size:0.78rem;color:var(--border);margin-bottom:20px">Start a session to track beers consumed tonight. Beers drunk auto-pay off debts oldest first — surplus goes to credit.</p>' +
+        '<div style="margin-bottom:24px" id="balanceSection"></div>' +
+        '<button class="add-btn btn-green" data-action="startSession">🍻 Start Pub Session</button>';
+      renderBalances();
+    } else {
+      // Active session — show drink logger
+      el.innerHTML =
+        '<div class="section-title" style="margin-bottom:8px">🍻 Session in Progress</div>' +
+        '<p style="font-size:0.78rem;color:var(--border);margin-bottom:16px">Tap + each time someone drinks. Hit Close Session when done.</p>' +
+        '<div class="buoy-grid" id="buoyGrid"></div>' +
+        '<div style="margin-top:8px" id="balanceSection"></div>';
+      renderBuoyGrid();
+      renderBalances();
+    }
+  }
+
+  function renderBuoyGrid() {
+    const grid = document.getElementById('buoyGrid');
+    if (!grid) return;
+    grid.innerHTML = BUOYS.map(name => {
+      const owed = calcOwedByPerson(name);
+      return '<div class="buoy-card">' +
+        '<div>' +
+          '<div class="buoy-name">' + name + '</div>' +
+          (owed > 0 ? '<span class="buoy-owed">owes ' + owed + ' 🍺</span>' : '<span class="buoy-owed" style="color:var(--green)">square ✓</span>') +
+        '</div>' +
+        '<div class="buoy-count" id="dc-' + name + '">' + sessionCounts[name] + '</div>' +
+        '<div class="buoy-stepper">' +
+          '<button class="step-btn" data-action="stepDrink" data-name="' + name + '" data-dir="1">+</button>' +
+          '<button class="step-btn" data-action="stepDrink" data-name="' + name + '" data-dir="-1">−</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderBalances() {
+    // Re-render pub session content first if needed so balanceSection exists
+    const pubContent = document.getElementById('pubSessionContent');
+    if (!pubContent) return;
+    // If pubSessionContent is empty, trigger a full pub session render
+    if (!document.getElementById('balanceSection')) { renderPubSession(); return; }
+    const el = document.getElementById('balanceSection');
+    if (!el) return;
+    const rows = BUOYS.map(name => {
+      const owed = calcOwedByPerson(name);
+      const credit = (credits[name] && credits[name].amount) || 0;
+      const net = credit - owed; // positive = in credit, negative = still owes
+      return { name, owed, credit, net };
+    }).sort((a, b) => b.net - a.net);
+
+    const hasData = rows.some(r => r.owed > 0 || r.credit > 0);
+    if (!hasData) return;
+
+    el.innerHTML = '<div class="section-title" style="margin-bottom:12px;margin-top:20px">💳 Running Balance</div>' +
+      rows.map(r => {
+        const cls = r.net > 0 ? 'credit' : r.net < 0 ? 'debit' : 'square';
+        const color = r.net > 0 ? 'var(--green)' : r.net < 0 ? 'var(--red)' : 'var(--border)';
+        return '<div class="balance-row ' + cls + '">' +
+          '<span class="balance-name" style="color:' + color + '">' + esc(r.name) + '</span>' +
+          '<span class="balance-detail">' + r.credit + ' drunk · ' + r.owed + ' owed</span>' +
+          '<span class="balance-net" style="color:' + color + '">' + (r.net > 0 ? '+' : '') + r.net + ' 🍺</span>' +
+        '</div>';
+      }).join('');
+  }
+
+  function calcOwedByPerson(name) {
+    let owed = 0;
+    Object.values(bets).forEach(b => {
+      if (b.paid === true) return;
+      const rem = b.amount - (b.paidPartial || 0);
+      if (rem <= 0) return;
+      if ((b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name)) owed += rem;
+    });
+    Object.values(punishments).forEach(p => {
+      if (p.paid === true) return;
+      if (p.name === name) owed += (p.amount - (p.paidPartial || 0));
+    });
+    return Math.round(owed);
+  }
+
+  function openCloseSession() {
+    const summary = document.getElementById('sessionSummary');
+    const rows = BUOYS.map(name => {
+      const drunk = sessionCounts[name];
+      const owed = calcOwedByPerson(name);
+      const credit = (credits[name] && credits[name].amount) || 0;
+      // Apply tonight's drinks against debt first, then credit
+      const debtPaid = Math.min(drunk, owed);
+      const newCredit = credit + Math.max(0, drunk - owed);
+      const remainingDebt = owed - debtPaid;
+      return { name, drunk, owed, debtPaid, newCredit, remainingDebt };
+    }).filter(r => r.drunk > 0 || r.owed > 0 || r.newCredit !== ((credits[r.name] && credits[r.name].amount) || 0));
+
+    if (!rows.length) {
+      summary.innerHTML = '<div class="empty-state">No beers logged this session.</div>';
+    } else {
+      summary.innerHTML = rows.map(r => {
+        let detail = '';
+        if (r.drunk > 0 && r.debtPaid > 0) detail += r.debtPaid + ' 🍺 debt paid';
+        if (r.newCredit > 0 && r.drunk > r.debtPaid) detail += (detail ? ' · ' : '') + r.newCredit + ' 🍺 credit';
+        if (r.remainingDebt > 0) detail += (detail ? ' · ' : '') + r.remainingDebt + ' 🍺 still owed';
+        if (r.drunk === 0) detail = 'no beers tonight — ' + r.owed + ' 🍺 still owed';
+        const color = r.remainingDebt === 0 && r.drunk > 0 ? 'var(--green)' : r.remainingDebt > 0 ? 'var(--red)' : 'var(--border)';
+        return '<div class="summary-row">' +
+          '<span class="summary-name">' + esc(r.name) + '</span>' +
+          '<span class="summary-detail">' + detail + '</span>' +
+          '<span class="summary-result" style="color:' + color + '">' + (r.drunk > 0 ? r.drunk + ' 🍺' : '—') + '</span>' +
+        '</div>';
+      }).join('');
+    }
+    document.getElementById('closeSessionModal').classList.add('open');
+  }
+
+  function confirmCloseSession() {
+    const now = new Date().toISOString();
+    BUOYS.forEach(name => {
+      const drunk = sessionCounts[name];
+      if (drunk === 0) return;
+      const owed = calcOwedByPerson(name);
+      let remaining = drunk;
+
+      // Pay off bets oldest first
+      const unpaidBets = Object.entries(bets)
+        .filter(([, b]) => b.paid !== true && ((b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name)))
+        .sort((a, b) => (a[1].createdAt || '').localeCompare(b[1].createdAt || ''));
+
+      unpaidBets.forEach(([id, b]) => {
+        if (remaining <= 0) return;
+        const betOwed = b.amount - (b.paidPartial || 0);
+        if (remaining >= betOwed) {
+          update(ref(db, 'bets/' + id), { paid: true, paidAt: now });
+          remaining -= betOwed;
+        } else {
+          update(ref(db, 'bets/' + id), { paidPartial: (b.paidPartial || 0) + remaining });
+          remaining = 0;
+        }
+      });
+
+      // Pay off punishments oldest first
+      const unpaidPunish = Object.entries(punishments)
+        .filter(([, p]) => p.paid !== true && p.name === name)
+        .sort((a, b) => (a[1].createdAt || '').localeCompare(b[1].createdAt || ''));
+
+      unpaidPunish.forEach(([id, p]) => {
+        if (remaining <= 0) return;
+        const pOwed = p.amount - (p.paidPartial || 0);
+        if (remaining >= pOwed) {
+          update(ref(db, 'punishments/' + id), { paid: true, paidAt: now });
+          remaining -= pOwed;
+        } else {
+          update(ref(db, 'punishments/' + id), { paidPartial: (p.paidPartial || 0) + remaining });
+          remaining = 0;
+        }
+      });
+
+      // Remaining goes to credit
+      const currentCredit = (credits[name] && credits[name].amount) || 0;
+      update(ref(db, 'credits/' + name), { amount: currentCredit + remaining, name });
+
+      // Log it
+      push(ref(db, 'beerLog'), {
+        text: name + ' drank ' + drunk + ' 🍺' + (Math.min(drunk, owed) > 0 ? ' — paid off ' + Math.min(drunk, owed) + ' owed' : '') + (remaining > 0 ? ' — ' + remaining + ' in credit' : ''),
+        amount: drunk, createdAt: now, undoType: 'session', sessionName: name, sessionDrunk: drunk
+      });
+
+      sessionCounts[name] = 0;
+    });
+
+    // Close the session and clear counts
+    const clearCounts = {};
+    BUOYS.forEach(n => { clearCounts[n] = 0; sessionCounts[n] = 0; });
+    update(ref(db, 'sessionCounts'), clearCounts);
+    update(ref(db, 'activeSession'), { active: false });
+    document.getElementById('closeSessionModal').classList.remove('open');
+    showToast('🍻 Session closed — all updated!');
+  }
+
+  // --- Add Punishment ---
+  function addPunishment() {
+    const name = v('pName'), issuer = v('pIssuer');
+    const reason = v('pReason');
+    const amount = Math.round(parseFloat(document.getElementById('pAmount').value) || 1);
+    if (!name) { showToast('Who copped it?', true); return; }
+    if (!issuer) { showToast('Who issued it?', true); return; }
+    if (!reason) { showToast('What did they do?', true); return; }
+    push(ref(db, 'punishments'), { type: 'punishment', name, issuer, reason, amount, createdAt: new Date().toISOString() });
+    showToast('⚡ ' + name + ' must drink ' + amount + ' 🍺');
+    ['pName','pIssuer','pReason'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('pAmount').value = '1';
+  }
+
+  // --- Add Bet ---
+  function addBet() {
+    const bettor = v('bettor'), opponent = v('opponent'), description = v('description');
+    const amount = Math.round(parseFloat(document.getElementById('amount').value) || 1);
+    const category = document.getElementById('category').value;
+    const witness1 = v('witness1'), witness2 = v('witness2');
+    if (!bettor) { showToast('Who is proposing?', true); return; }
+    if (!opponent) { showToast('Who is the bet against?', true); return; }
+    if (!description) { showToast('What is the bet?', true); return; }
+    push(ref(db, 'bets'), { type: 'bet', bettor, opponent, description, amount, category, witness1: witness1 || null, witness2: witness2 || null, status: 'pending', createdAt: new Date().toISOString() });
+    showToast('📨 Bet proposed — waiting for ' + opponent + ' to accept');
+    ['description','witness1','witness2'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('amount').value = '1';
+  }
+
+  function acceptBet(id) { update(ref(db, 'bets/' + id), { status: 'open', acceptedAt: new Date().toISOString() }); showToast('✅ Bet accepted!'); }
+  function declineBet(id) { update(ref(db, 'bets/' + id), { status: 'declined' }); showToast('❌ Bet declined'); }
+
+  function markBet(id, status) {
+    const b = bets[id]; if (!b) return;
+    update(ref(db, 'bets/' + id), { status, resolvedAt: status !== 'open' ? new Date().toISOString() : null });
+    if (status === 'won') showToast('🏆 ' + b.bettor + ' wins! ' + b.opponent + ' owes ' + b.amount + ' 🍺');
+    else if (status === 'lost') showToast('😬 ' + b.bettor + ' lost — owes ' + b.amount + ' 🍺');
+    else showToast('↩ Bet reopened');
+  }
+
+  // --- Undo log ---
+  function undoLog(logId) {
+    if (!confirm('Undo this log entry? Credits and debt payments will be reversed.')) return;
+    const entry = beerLog[logId]; if (!entry) return;
+
+    if (entry.undoType === 'session' && entry.sessionName) {
+      const name = entry.sessionName;
+      const drunk = entry.sessionDrunk || 0;
+
+      // Remove credit that was added (surplus after debts)
+      const currentCredit = (credits[name] && credits[name].amount) || 0;
+      const owed = calcOwedByPerson(name); // current owed AFTER session applied
+      // Credit added = drunk - originalOwed. Since we don't store original owed, we reverse what we can:
+      // Reverse: set credit back by subtracting what would have been credited
+      const creditAdded = Math.max(0, drunk - (owed + (currentCredit > 0 ? currentCredit : 0)));
+      const newCredit = Math.max(0, currentCredit - Math.max(0, drunk - (calcOwedBeforeSession(name, drunk))));
+      update(ref(db, 'credits/' + name), { amount: Math.max(0, currentCredit - drunk), name });
+
+      // Reopen bets/punishments that got fully paid in this session (find ones paid recently)
+      // We mark them unpaid — simpler and reliable
+      Object.entries(bets).forEach(([id, b]) => {
+        if (b.paidAt && b.paidAt >= (entry.createdAt || '') && b.paid === true) {
+          const isThisPerson = (b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name);
+          if (isThisPerson) update(ref(db, 'bets/' + id), { paid: null, paidAt: null, paidPartial: null });
+        }
+        // Also reset partial payments made during session
+        if (b.paidPartial && !b.paid) {
+          const isThisPerson = (b.status === 'lost' && b.bettor === name) || (b.status === 'won' && b.opponent === name);
+          if (isThisPerson) update(ref(db, 'bets/' + id), { paidPartial: null });
+        }
+      });
+      Object.entries(punishments).forEach(([id, p]) => {
+        if (p.paidAt && p.paidAt >= (entry.createdAt || '') && p.paid === true && p.name === name) {
+          update(ref(db, 'punishments/' + id), { paid: null, paidAt: null, paidPartial: null });
+        }
+        if (p.paidPartial && !p.paid && p.name === name) {
+          update(ref(db, 'punishments/' + id), { paidPartial: null });
+        }
+      });
+    }
+
+    remove(ref(db, 'beerLog/' + logId));
+    showToast('↩ Session entry undone — debts restored');
+  }
+
+  function calcOwedBeforeSession(name, sessionDrunk) {
+    // Estimate what was owed before session by adding back what was paid
+    return calcOwedByPerson(name) + sessionDrunk;
+  }
+
+  // --- Leaderboard ---
+  function buildLeaderboard() {
+    const players = {};
+    const ensure = n => { if (!players[n]) players[n] = { name: n, beers: 0, wins: 0, losses: 0, open: 0, punishments: 0, punishBeers: 0, streak: 0, lastResults: [], beersDrunk: 0, biggestWin: 0, biggestLoss: 0, fastestPayDays: [], biggestSession: 0 }; };
+    Object.values(bets).forEach(b => {
+      if (b.status === 'pending' || b.status === 'declined') return;
+      ensure(b.bettor); ensure(b.opponent);
+      if (b.status === 'won') {
+        players[b.bettor].wins++; players[b.opponent].losses++;
+        players[b.bettor].lastResults.unshift('W'); players[b.opponent].lastResults.unshift('L');
+        players[b.bettor].biggestWin = Math.max(players[b.bettor].biggestWin, b.amount);
+        players[b.opponent].biggestLoss = Math.max(players[b.opponent].biggestLoss, b.amount);
+        if (b.paid === true && b.resolvedAt && b.paidAt) {
+          const days = Math.round((new Date(b.paidAt) - new Date(b.resolvedAt)) / 86400000);
+          players[b.opponent].fastestPayDays.push(days);
+        }
+      } else if (b.status === 'lost') {
+        players[b.bettor].losses++; players[b.opponent].wins++;
+        players[b.bettor].lastResults.unshift('L'); players[b.opponent].lastResults.unshift('W');
+        players[b.opponent].biggestWin = Math.max(players[b.opponent].biggestWin, b.amount);
+        players[b.bettor].biggestLoss = Math.max(players[b.bettor].biggestLoss, b.amount);
+        if (b.paid === true && b.resolvedAt && b.paidAt) {
+          const days = Math.round((new Date(b.paidAt) - new Date(b.resolvedAt)) / 86400000);
+          players[b.bettor].fastestPayDays.push(days);
+        }
+      } else { players[b.bettor].open++; players[b.opponent].open++; }
+    });
+    Object.values(punishments).forEach(p => {
+      ensure(p.name);
+      players[p.name].punishments++;
+      players[p.name].punishBeers += p.amount;
+    });
+    // Use same calculation as Pub Session for net balance
+    BUOYS.forEach(name => {
+      ensure(name);
+      const owed = calcOwedByPerson(name);
+      const credit = (credits[name] && credits[name].amount) || 0;
+      players[name].beers = credit - owed;
+    });
+    // For non-Buoys who appear in bets (opponents outside the group)
+    Object.values(players).forEach(p => {
+      if (!BUOYS.includes(p.name)) {
+        const owed = calcOwedByPerson(p.name);
+        const credit = (credits[p.name] && credits[p.name].amount) || 0;
+        p.beers = credit - owed;
+      }
+    });
+    // Calc beers drunk and biggest session from log
+    Object.values(beerLog).forEach(l => {
+      if (l.undoType === 'session' && l.sessionName) {
+        ensure(l.sessionName);
+        players[l.sessionName].beersDrunk += (l.sessionDrunk || 0);
+        players[l.sessionName].biggestSession = Math.max(players[l.sessionName].biggestSession, l.sessionDrunk || 0);
+      }
+    });
+    Object.values(players).forEach(p => {
+      let streak = 0;
+      for (const r of p.lastResults) { if (r === 'W') streak++; else break; }
+      p.streak = streak;
+      p.avgPayDays = p.fastestPayDays.length ? Math.round(p.fastestPayDays.reduce((s,d)=>s+d,0) / p.fastestPayDays.length) : null;
+    });
+    return Object.values(players).sort((a, b) => b.beers - a.beers);
+  }
+
+  // --- Render ---
+  function render() { renderLeaderboard(); renderStats(); renderBets(); renderPunishments(); renderHof(); renderTab(); renderBalances(); }
+
+  function renderTab() {
+    const debts = calcAllDebts();
+    document.getElementById('tabNumber').textContent = debts.total;
+    const parts = [];
+    if (debts.betDebt > 0) parts.push(debts.betDebt + ' from bets');
+    if (debts.punishDebt > 0) parts.push(debts.punishDebt + ' from punishments');
+    document.getElementById('tabBreakdown').textContent = parts.length ? parts.join(' · ') : 'All square! 🎉';
+  }
+
+  function calcAllDebts() {
+    let betDebt = 0, punishDebt = 0;
+    Object.values(bets).forEach(b => {
+      if (b.paid === true) return;
+      const rem = b.amount - (b.paidPartial || 0);
+      if (rem > 0 && (b.status === 'won' || b.status === 'lost')) betDebt += rem;
+    });
+    Object.values(punishments).forEach(p => {
+      if (p.paid === true) return;
+      punishDebt += (p.amount - (p.paidPartial || 0));
+    });
+    return { betDebt: Math.round(betDebt), punishDebt: Math.round(punishDebt), total: Math.round(betDebt + punishDebt) };
+  }
+
+  function renderLeaderboard() {
+    const lb = buildLeaderboard();
+    const el = document.getElementById('leaderboard');
+    if (!lb.length) { el.innerHTML = '<div class="empty-state">No players yet</div>'; return; }
+    const medals = ['🥇','🥈','🥉'];
+    el.innerHTML = lb.map((p, i) =>
+      '<div class="player-row" data-action="openProfile" data-name="' + esc(p.name) + '" style="cursor:pointer">' +
+        '<span class="player-rank">' + (medals[i] || (i+1)+'.') + '</span>' +
+        '<span class="player-name">' + esc(p.name) + '</span>' +
+        '<span class="player-record">' +
+          p.wins + 'W ' + p.losses + 'L' + (p.open > 0 ? ' · ' + p.open + ' open' : '') +
+          (p.streak > 1 ? '<br><span style="color:var(--green)">🔥 ' + p.streak + ' streak</span>' : '') +
+          (p.punishments > 0 ? '<br><span style="color:var(--punish-light)">⚡ ' + p.punishments + ' fine' + (p.punishments !== 1 ? 's' : '') + '</span>' : '') +
+        '</span>' +
+        '<span class="player-balance ' + (p.beers < 0 ? 'neg' : p.beers > 0 ? 'pos' : 'zero') + '">' +
+          (p.beers === 0 ? '0' : (p.beers > 0 ? '+' : '') + p.beers) + ' 🍺' +
+        '</span>' +
+      '</div>'
+    ).join('');
+  }
+
+  function renderStats() {
+    const bArr = Object.values(bets);
+    document.getElementById('statsBar').innerHTML =
+      '<div class="stat-pill"><strong>' + bArr.length + '</strong>Total</div>' +
+      '<div class="stat-pill"><strong style="color:#60a5fa">' + bArr.filter(b=>b.status==='pending').length + '</strong>Pending</div>' +
+      '<div class="stat-pill"><strong style="color:var(--amber)">' + bArr.filter(b=>b.status==='open').length + '</strong>Active</div>' +
+      '<div class="stat-pill"><strong style="color:var(--green)">' + bArr.filter(b=>b.status==='won').length + '</strong>Won</div>' +
+      '<div class="stat-pill"><strong style="color:var(--red)">' + bArr.filter(b=>b.status==='lost').length + '</strong>Lost</div>';
+  }
+
+  function renderBets() {
+    const el = document.getElementById('betsList');
+    let items = Object.entries(bets).map(([id, b]) => ({...b, id}));
+    if (currentFilter !== 'all') items = items.filter(b => b.status === currentFilter);
+    items.sort((a, b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    if (!items.length) { el.innerHTML = '<div class="empty-state">No bets here.</div>'; return; }
+    el.innerHTML = items.map(b => {
+      const catEmoji = {footy:'🏉',general:'🎲',sport:'⚽',misc:'🤷'}[b.category]||'🎲';
+      const witnesses = [b.witness1,b.witness2].filter(Boolean);
+      const isPaid = b.paid === true;
+      const paidPartial = b.paidPartial || 0;
+      const remaining = b.amount - paidPartial;
+      let actions = '';
+      if (b.status === 'pending') {
+        actions = '<button class="action-btn btn-accept" data-action="acceptBet" data-id="'+b.id+'">✓ Accept</button><button class="action-btn btn-decline" data-action="declineBet" data-id="'+b.id+'">✗ Decline</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      } else if (b.status === 'open') {
+        actions = '<button class="action-btn btn-won" data-action="won" data-id="'+b.id+'">✓ Won</button><button class="action-btn btn-lost" data-action="lost" data-id="'+b.id+'">✗ Lost</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      } else if ((b.status==='won'||b.status==='lost') && !isPaid) {
+        actions = '<span style="font-size:0.7rem;color:var(--border)">Pay via Pub Session</span><button class="action-btn btn-reopen" data-action="reopen" data-id="'+b.id+'">↩</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      } else {
+        actions = '<button class="action-btn btn-reopen" data-action="reopen" data-id="'+b.id+'">↩ Reopen</button><button class="action-btn btn-delete" data-action="deleteBet" data-id="'+b.id+'">🗑</button>';
+      }
+      return '<div class="bet-card '+b.status+(isPaid?'" style="opacity:0.5':'')+'">' +
+        '<div class="bet-header"><span class="bet-bettor">'+esc(b.bettor)+'</span><span class="bet-vs">vs</span><span class="bet-opponent">'+esc(b.opponent)+'</span></div>' +
+        '<div class="bet-desc">'+esc(b.description)+'</div>' +
+        '<div class="bet-meta">' +
+          '<span class="tag tag-'+b.status+'">'+b.status.toUpperCase()+(isPaid?' · PAID':'')+'</span>' +
+          '<span class="bet-amount">'+(paidPartial>0?remaining+'/'+b.amount:b.amount)+' 🍺</span>' +
+          '<span class="bet-amount">'+catEmoji+' '+b.category+'</span>' +
+          (witnesses.length?'<span class="bet-witnesses">👁 '+witnesses.map(esc).join(', ')+'</span>':'') +
+          '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">'+fmtDate(b.createdAt)+'</span>' +
+        '</div>' +
+        '<div class="bet-actions">'+actions+'</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderPunishments() {
+    const el = document.getElementById('punishList');
+    const items = Object.entries(punishments).map(([id,p])=>({...p,id})).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+    if (!items.length) { el.innerHTML = '<div class="empty-state">No punishments yet.</div>'; return; }
+    el.innerHTML = items.map(p => {
+      const isPaid = p.paid === true;
+      const remaining = p.amount - (p.paidPartial || 0);
+      return '<div class="punish-card'+(isPaid?'" style="opacity:0.5':'')+'">' +
+        '<div class="punish-header"><span class="punish-name">⚡ '+esc(p.name)+'</span><span style="color:var(--border);font-size:0.75rem">issued by</span><span style="color:var(--border);font-family:\'Playfair Display\',serif;font-size:0.9rem">'+esc(p.issuer)+'</span></div>' +
+        '<div class="punish-desc">'+esc(p.reason)+'</div>' +
+        '<div class="bet-meta" style="margin-bottom:10px">' +
+          '<span class="tag tag-punish">PUNISHMENT'+(isPaid?' · DONE':'')+'</span>' +
+          '<span class="bet-amount">'+(p.paidPartial>0?remaining+'/'+p.amount:p.amount)+' 🍺</span>' +
+          (isPaid?'':'<span style="font-size:0.7rem;color:var(--border)">Pay via Pub Session</span>') +
+          '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">'+fmtDate(p.createdAt)+'</span>' +
+        '</div>' +
+        '<div class="bet-actions"><button class="action-btn btn-delete" data-action="deletePunish" data-id="'+p.id+'">🗑</button></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderHof() {
+    const lb = buildLeaderboard();
+    const withBets = lb.filter(p => p.wins + p.losses > 0);
+    const el = document.getElementById('hofGrid');
+    if (!lb.length) { el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div>'; return; }
+
+    const cards = [];
+
+    // Most Wins
+    if (withBets.length) {
+      const top = [...withBets].sort((a,b)=>b.wins-a.wins)[0];
+      if (top.wins > 0) cards.push({ emoji:'🏆', title:'Most Wins', name: top.name, stat: top.wins + ' wins' });
+
+      // Biggest Loser
+      const bigLose = [...withBets].sort((a,b)=>b.losses-a.losses)[0];
+      if (bigLose.losses > 0) cards.push({ emoji:'😭', title:'Biggest Loser', name: bigLose.name, stat: bigLose.losses + ' losses' });
+
+      // Win streak
+      const bestStreak = [...withBets].sort((a,b)=>b.streak-a.streak)[0];
+      if (bestStreak.streak > 1) cards.push({ emoji:'🔥', title:'Win Streak', name: bestStreak.name, stat: bestStreak.streak + ' in a row' });
+
+      // Biggest single bet won
+      const bigWin = [...lb].sort((a,b)=>b.biggestWin-a.biggestWin)[0];
+      if (bigWin && bigWin.biggestWin > 0) cards.push({ emoji:'💰', title:'Biggest Bet Won', name: bigWin.name, stat: bigWin.biggestWin + ' 🍺 in one bet' });
+
+      // Biggest single bet lost
+      const bigLoss = [...lb].sort((a,b)=>b.biggestLoss-a.biggestLoss)[0];
+      if (bigLoss && bigLoss.biggestLoss > 0) cards.push({ emoji:'💀', title:'Biggest Bet Lost', name: bigLoss.name, stat: bigLoss.biggestLoss + ' 🍺 in one bet' });
+
+      // Most punctual payer (lowest avg days to pay)
+      const payers = lb.filter(p => p.avgPayDays !== null);
+      if (payers.length) {
+        const quickest = [...payers].sort((a,b) => a.avgPayDays - b.avgPayDays)[0];
+        cards.push({ emoji:'⚡', title:'Most Punctual Payer', name: quickest.name, stat: quickest.avgPayDays === 0 ? 'Same day!' : quickest.avgPayDays + ' day avg' });
+      }
+    }
+
+    // Most Fined
+    const mostShamed = [...lb].sort((a,b)=>b.punishments-a.punishments)[0];
+    if (mostShamed && mostShamed.punishments > 0) cards.push({ emoji:'🚨', title:'Most Fined', name: mostShamed.name, stat: mostShamed.punishments + ' punishment' + (mostShamed.punishments !== 1 ? 's' : '') + ' · ' + mostShamed.punishBeers + ' 🍺' });
+
+    // Most beers consumed (all time)
+    const mostConsumed = [...lb].sort((a,b)=>b.beersDrunk-a.beersDrunk)[0];
+    if (mostConsumed && mostConsumed.beersDrunk > 0) cards.push({ emoji:'🍺', title:'Most Beers Consumed', name: mostConsumed.name, stat: mostConsumed.beersDrunk + ' 🍺 all time' });
+
+    // Biggest single session
+    const bigSession = [...lb].sort((a,b)=>b.biggestSession-a.biggestSession)[0];
+    if (bigSession && bigSession.biggestSession > 0) cards.push({ emoji:'🌊', title:'Biggest Session', name: bigSession.name, stat: bigSession.biggestSession + ' 🍺 in one night' });
+
+    // Longest outstanding unpaid debt
+    const now = new Date();
+    let longestDebtor = null, longestDays = 0;
+    Object.values(bets).forEach(b => {
+      if (b.paid === true) return;
+      if (b.status !== 'won' && b.status !== 'lost') return;
+      const debtor = b.status === 'lost' ? b.bettor : b.opponent;
+      const days = Math.round((now - new Date(b.resolvedAt || b.createdAt)) / 86400000);
+      if (days > longestDays) { longestDays = days; longestDebtor = debtor; }
+    });
+    Object.values(punishments).forEach(p => {
+      if (p.paid === true) return;
+      const days = Math.round((now - new Date(p.createdAt)) / 86400000);
+      if (days > longestDays) { longestDays = days; longestDebtor = p.name; }
+    });
+    if (longestDebtor) cards.push({ emoji:'⏳', title:'Longest Unpaid Debt', name: longestDebtor, stat: longestDays + ' day' + (longestDays !== 1 ? 's' : '') + ' overdue' });
+
+    if (!cards.length) { el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Not enough data yet.</div>'; return; }
+    el.innerHTML = cards.map(c =>
+      '<div class="hof-card"><span class="hof-emoji">'+c.emoji+'</span><div class="hof-title">'+c.title+'</div><div class="hof-name">'+esc(c.name)+'</div><div class="hof-stat">'+c.stat+'</div></div>'
+    ).join('');
+  }
+
+  function renderBeerLog() {
+    const el = document.getElementById('beerLog');
+    const items = Object.entries(beerLog).map(([id,l])=>({...l,id})).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+    if (!items.length) { el.innerHTML = '<div class="empty-state">No beers logged yet.</div>'; return; }
+    el.innerHTML = items.map(l =>
+      '<div class="beer-log-item">' +
+        '<span style="font-size:1.2rem">🍺</span>' +
+        '<span class="beer-log-text">'+esc(l.text)+'</span>' +
+        '<span class="beer-log-date">'+fmtDate(l.createdAt)+'</span>' +
+        '<button class="action-btn btn-reopen" style="font-size:0.6rem;padding:5px 8px;border-color:rgba(200,153,26,0.3);color:var(--border)" data-action="undoLog" data-id="'+l.id+'">↩</button>' +
+      '</div>'
+    ).join('');
+  }
+
+  // --- Player Profile ---
+  function openProfile(name) {
+    const lb = buildLeaderboard();
+    const p = lb.find(p => p.name === name) || { name, beers: 0, wins: 0, losses: 0, open: 0, punishments: 0, punishBeers: 0, streak: 0, beersDrunk: 0, biggestWin: 0, biggestLoss: 0, biggestSession: 0, avgPayDays: null };
+    const owed = calcOwedByPerson(name);
+    const credit = (credits[name] && credits[name].amount) || 0;
+    const net = credit - owed;
+
+    // Header
+    document.getElementById('profileName').textContent = name;
+    const balEl = document.getElementById('profileBalance');
+    balEl.textContent = (net > 0 ? '+' : '') + net + ' 🍺';
+    balEl.style.color = net > 0 ? 'var(--green)' : net < 0 ? 'var(--red)' : 'var(--border)';
+
+    // Stats row
+    document.getElementById('profileStatsRow').innerHTML =
+      '<div class="profile-stat"><strong>' + p.wins + '</strong><span>Wins</span></div>' +
+      '<div class="profile-stat"><strong>' + p.losses + '</strong><span>Losses</span></div>' +
+      '<div class="profile-stat"><strong>' + p.punishments + '</strong><span>Fines</span></div>' +
+      '<div class="profile-stat"><strong>' + p.beersDrunk + '</strong><span>Consumed</span></div>' +
+      (p.streak > 1 ? '<div class="profile-stat"><strong style="color:var(--green)">' + p.streak + '🔥</strong><span>Streak</span></div>' : '') +
+      (p.biggestSession > 0 ? '<div class="profile-stat"><strong>' + p.biggestSession + '</strong><span>Best Session</span></div>' : '');
+
+    // Sections
+    let html = '';
+
+    // Active bets
+    const myBets = Object.values(bets).filter(b =>
+      (b.bettor === name || b.opponent === name) && b.status !== 'declined'
+    ).sort((a, b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+
+    if (myBets.length) {
+      html += '<div class="profile-section-title">🍺 Bets</div>';
+      html += myBets.map(b => {
+        const isProposer = b.bettor === name;
+        const other = isProposer ? b.opponent : b.bettor;
+        const isPaid = b.paid === true;
+        const remaining = b.amount - (b.paidPartial || 0);
+        const statusColor = { won:'var(--green)', lost:'var(--red)', open:'var(--amber)', pending:'#60a5fa', declined:'var(--border)' }[b.status] || 'var(--border)';
+        return '<div class="profile-bet-row">' +
+          '<div class="profile-bet-desc">' + esc(b.description) + '</div>' +
+          '<div class="profile-bet-meta">' +
+            '<span class="tag tag-' + b.status + '">' + b.status.toUpperCase() + (isPaid ? ' · PAID' : '') + '</span>' +
+            '<span style="font-size:0.75rem;color:var(--border)">vs ' + esc(other) + '</span>' +
+            '<span style="font-size:0.75rem;color:var(--border)">' + (isPaid ? b.amount : remaining) + ' 🍺</span>' +
+            '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">' + fmtDate(b.createdAt) + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // Punishments
+    const myPunishments = Object.values(punishments).filter(p => p.name === name)
+      .sort((a, b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+
+    if (myPunishments.length) {
+      html += '<div class="profile-section-title">⚡ Punishments</div>';
+      html += myPunishments.map(p => {
+        const isPaid = p.paid === true;
+        const remaining = p.amount - (p.paidPartial || 0);
+        return '<div class="profile-punish-row">' +
+          '<div class="profile-punish-desc">' + esc(p.reason) + '</div>' +
+          '<div class="profile-bet-meta">' +
+            '<span class="tag tag-punish">' + (isPaid ? 'DONE' : 'OUTSTANDING') + '</span>' +
+            '<span style="font-size:0.75rem;color:var(--border)">' + (isPaid ? p.amount : remaining) + ' 🍺</span>' +
+            '<span style="font-size:0.65rem;color:rgba(196,169,106,0.5)">issued by ' + esc(p.issuer) + '</span>' +
+            '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5)">' + fmtDate(p.createdAt) + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // Beer log
+    const myLog = Object.values(beerLog).filter(l => l.sessionName === name)
+      .sort((a, b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+
+    if (myLog.length) {
+      html += '<div class="profile-section-title">📖 Beer Log</div>';
+      html += myLog.map(l =>
+        '<div class="profile-log-row" style="display:flex;justify-content:space-between;align-items:center">' +
+          '<span>' + esc(l.text) + '</span>' +
+          '<span style="font-size:0.63rem;color:rgba(196,169,106,0.5);white-space:nowrap;padding-left:8px">' + fmtDate(l.createdAt) + '</span>' +
+        '</div>'
+      ).join('');
+    }
+
+    if (!html) html = '<div class="empty-state">No activity yet.</div>';
+
+    document.getElementById('profileSections').innerHTML = html;
+    document.getElementById('profileModal').classList.add('open');
+  }
+
+  // --- SPIN WHEEL ---
+  function openSpin() {
+    if (spinPlayers.length === 0) spinPlayers = [...BUOYS];
+    renderChips(); drawWheel();
+    document.getElementById('spinResult').textContent = '';
+    document.getElementById('spinModal').classList.add('open');
+  }
+
+  function addSpinPlayer() {
+    const input = document.getElementById('spinPlayerInput');
+    const name = (input.value||'').trim();
+    if (!name) return;
+    if (!spinPlayers.includes(name)) spinPlayers.push(name);
+    input.value = '';
+    renderChips(); drawWheel();
+  }
+
+  function renderChips() {
+    document.getElementById('playerChips').innerHTML = spinPlayers.map((p,i) =>
+      '<div class="player-chip">'+esc(p)+'<span class="chip-remove" data-action="removeSpinPlayer" data-idx="'+i+'">×</span></div>'
+    ).join('') || '<div style="color:var(--border);font-size:0.75rem;padding:8px">Add players above</div>';
+  }
+
+  function drawWheel(highlightIdx) {
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const cx=140,cy=140,r=130;
+    ctx.clearRect(0,0,280,280);
+    if (!spinPlayers.length) {
+      ctx.fillStyle='rgba(255,255,255,0.05)'; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(196,169,106,0.4)'; ctx.font='14px DM Mono,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('Add players',cx,cy);
+      return;
+    }
+    const n=spinPlayers.length, arc=(2*Math.PI)/n;
+    spinPlayers.forEach((name,i) => {
+      const s=i*arc-Math.PI/2, e=s+arc;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+      ctx.fillStyle=i===highlightIdx?'#fff':WHEEL_COLORS[i%WHEEL_COLORS.length]; ctx.fill();
+      ctx.strokeStyle='#1c0f05'; ctx.lineWidth=2; ctx.stroke();
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+arc/2); ctx.textAlign='right';
+      ctx.fillStyle='#1c0f05'; ctx.font='bold '+Math.min(14,Math.max(9,100/n))+'px DM Mono,monospace';
+      ctx.fillText(name.length>10?name.slice(0,9)+'…':name,r-8,4); ctx.restore();
+    });
+    ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fillStyle='#1c0f05'; ctx.fill();
+    ctx.strokeStyle='rgba(200,153,26,0.6)'; ctx.lineWidth=2; ctx.stroke();
+  }
+
+  function doSpin() {
+    if (isSpinning||spinPlayers.length<2) { if(spinPlayers.length<2) showToast('Add at least 2 players!',true); return; }
+    isSpinning=true;
+    document.getElementById('spinGoBtn').disabled=true;
+    document.getElementById('spinResult').textContent='🎰 Spinning...';
+    const n=spinPlayers.length, winnerIdx=Math.floor(Math.random()*n);
+    const arcDeg=360/n, sliceMid=winnerIdx*arcDeg+arcDeg/2;
+    const targetAngle=360*6-sliceMid;
+    const duration=4500, startTime=performance.now();
+    function animate(now) {
+      const elapsed=now-startTime, progress=Math.min(elapsed/duration,1);
+      const eased=1-Math.pow(1-progress,4), current=targetAngle*eased;
+      const canvas=document.getElementById('wheelCanvas'), ctx=canvas.getContext('2d');
+      const cx=140,cy=140,r=130; ctx.clearRect(0,0,280,280);
+      const arcRad=(2*Math.PI)/n, offsetRad=(current*Math.PI)/180;
+      spinPlayers.forEach((name,i) => {
+        const s=i*arcRad-Math.PI/2+offsetRad, e=s+arcRad;
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+        ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length]; ctx.fill(); ctx.strokeStyle='#1c0f05'; ctx.lineWidth=2; ctx.stroke();
+        ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+arcRad/2); ctx.textAlign='right'; ctx.fillStyle='#1c0f05';
+        ctx.font='bold '+Math.min(14,Math.max(9,100/n))+'px DM Mono,monospace';
+        ctx.fillText(name.length>10?name.slice(0,9)+'…':name,r-8,4); ctx.restore();
+      });
+      ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fillStyle='#1c0f05'; ctx.fill();
+      ctx.strokeStyle='rgba(200,153,26,0.6)'; ctx.lineWidth=2; ctx.stroke();
+      if (progress<1) { requestAnimationFrame(animate); }
+      else {
+        isSpinning=false; document.getElementById('spinGoBtn').disabled=false;
+        document.getElementById('spinResult').textContent='🍺 '+spinPlayers[winnerIdx]+' is buying the round!';
+        drawWheel(winnerIdx);
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // --- Utils ---
+  function v(id) { return (document.getElementById(id).value||'').trim(); }
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function fmtDate(iso) { if(!iso) return ''; try { return new Date(iso).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return ''; } }
+  let toastTimer;
+  function showToast(msg,isError) {
+    const t=document.getElementById('toast'); t.textContent=msg;
+    t.className='toast'+(isError?' error':''); t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+  }
+</script>
+</body>
+</html>
